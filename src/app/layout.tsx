@@ -5,6 +5,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingCTA from "@/components/FloatingCTA";
 
+import { Providers } from "@/components/Providers";
+
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
@@ -72,31 +74,34 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${playfair.variable} ${outfit.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-sans bg-cream text-neutral-900 selection:bg-gold selection:text-white">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').catch(function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
+      <body className="min-h-full flex flex-col font-sans bg-cream text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100 selection:bg-gold selection:text-white">
+        <Providers>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                      console.log('ServiceWorker registration failed: ', err);
+                    });
                   });
-                });
-              }
-            `
-          }}
-        />
-        <Header />
-        <main className="flex-grow pt-16 sm:pt-20">
-          {children}
-        </main>
-        <Footer />
-        <FloatingCTA />
+                }
+              `
+            }}
+          />
+          <Header />
+          <main className="flex-grow pt-16 sm:pt-20">
+            {children}
+          </main>
+          <Footer />
+          <FloatingCTA />
+        </Providers>
       </body>
     </html>
   );

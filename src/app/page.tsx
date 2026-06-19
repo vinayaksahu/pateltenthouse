@@ -21,8 +21,10 @@ import {
 import { motion } from "framer-motion";
 import { getPackages, getReviews, getServices } from "@/lib/db";
 import { Package, Review, ServiceItem } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function HomePage() {
+  const { t } = useLanguage();
   const [packages, setPackages] = useState<Package[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
@@ -73,7 +75,7 @@ export default function HomePage() {
             className="inline-flex items-center space-x-2 bg-primary/20 text-gold border border-gold/30 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider"
           >
             <Sparkles className="h-4 w-4" />
-            <span>Bilaspur&apos;s Premier Event Rentals</span>
+            <span>{t("hero_subtitle")}</span>
           </motion.div>
 
           <motion.h1
@@ -82,7 +84,7 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-4xl sm:text-6xl md:text-7xl font-serif font-extrabold tracking-tight text-white"
           >
-            Patel <span className="gold-text-gradient block sm:inline">Tent House</span>
+            {t("hero_title").split(" ")[0]} <span className="gold-text-gradient block sm:inline">{t("hero_title").split(" ").slice(1).join(" ")}</span>
           </motion.h1>
 
           <motion.p
@@ -91,7 +93,7 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-lg sm:text-2xl text-neutral-300 font-serif max-w-3xl mx-auto leading-relaxed"
           >
-            Wedding, Mandap, Decoration, Chair, Light & Event Setup Services
+            {t("hero_desc")}
           </motion.p>
           
           <motion.p
@@ -100,7 +102,7 @@ export default function HomePage() {
             transition={{ duration: 1, delay: 0.6 }}
             className="text-md sm:text-lg text-gold font-serif italic"
           >
-            &quot;आपके हर शुभ अवसर को बनाएं खास&quot;
+            {t("hero_quote")}
           </motion.p>
 
           <motion.div
@@ -113,13 +115,13 @@ export default function HomePage() {
               href="/booking"
               className="w-full sm:w-auto px-8 py-3.5 rounded-full royal-red-gradient text-white font-bold text-sm shadow-xl gold-border hover:scale-105 transition-all text-center"
             >
-              Book Now
+              {t("book_now")}
             </Link>
             <Link
               href="/builder"
               className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-gold text-gold font-bold text-sm hover:scale-105 transition-all text-center"
             >
-              Get Custom Quote
+              {t("get_quote")}
             </Link>
             <a
               href="https://wa.me/919713661625"
@@ -128,50 +130,50 @@ export default function HomePage() {
               className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#25D366] text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-xl hover:bg-[#20ba59] transition-all hover:scale-105"
             >
               <MessageSquare className="h-4 w-4 fill-white" />
-              <span>WhatsApp Inquiry</span>
+              <span>{t("whatsapp_inquiry")}</span>
             </a>
           </motion.div>
         </div>
       </section>
 
       {/* STATISTICS & ABOUT SECTION */}
-      <section className="py-20 bg-cream relative">
+      <section className="py-20 bg-cream dark:bg-neutral-900 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="space-y-6">
-              <span className="text-primary font-bold text-sm uppercase tracking-wider block border-l-4 border-gold pl-2">
-                About Patel Tent House
+              <span className="text-primary dark:text-gold font-bold text-sm uppercase tracking-wider block border-l-4 border-gold pl-2">
+                {t("about_subtitle")}
               </span>
-              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900 leading-tight">
-                Crafting Auspicious Occasions With Grandeur & Royal Decor
+              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900 dark:text-white leading-tight">
+                {t("about_title")}
               </h2>
-              <p className="text-neutral-600 leading-relaxed font-sans text-sm sm:text-base">
-                Located in Gram Bhelai (PO Jayramnagar) Bilaspur, Patel Tent House has been the most trusted event organizer and tent service provider in the region. We offer absolute reliability, premium materials, and decorative aesthetics to transform weddings, receptions, engagements, and religious events into breathtaking celebrations.
+              <p className="text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans text-sm sm:text-base">
+                {t("about_desc")}
               </p>
 
               {/* Stats Grid */}
               <div className="grid grid-cols-3 gap-4 pt-4">
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-gold/15 text-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/5 text-primary flex items-center justify-center mx-auto mb-2">
+                <div className="bg-white dark:bg-neutral-800 p-4 rounded-xl shadow-sm border border-gold/15 text-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/5 dark:bg-gold/10 text-primary dark:text-gold flex items-center justify-center mx-auto mb-2">
                     <CalendarIcon className="h-5 w-5" />
                   </div>
-                  <span className="block text-2xl font-bold text-neutral-900">500+</span>
-                  <span className="text-xs text-neutral-500 font-medium">Total Events</span>
+                  <span className="block text-2xl font-bold text-neutral-900 dark:text-white">500+</span>
+                  <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">{t("stats_events")}</span>
                 </div>
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-gold/15 text-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/5 text-primary flex items-center justify-center mx-auto mb-2">
+                <div className="bg-white dark:bg-neutral-800 p-4 rounded-xl shadow-sm border border-gold/15 text-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/5 dark:bg-gold/10 text-primary dark:text-gold flex items-center justify-center mx-auto mb-2">
                     <Users className="h-5 w-5" />
                   </div>
-                  <span className="block text-2xl font-bold text-neutral-900">450+</span>
-                  <span className="text-xs text-neutral-500 font-medium">Happy Clients</span>
+                  <span className="block text-2xl font-bold text-neutral-900 dark:text-white">450+</span>
+                  <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">{t("stats_clients")}</span>
                 </div>
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-gold/15 text-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/5 text-primary flex items-center justify-center mx-auto mb-2">
+                <div className="bg-white dark:bg-neutral-800 p-4 rounded-xl shadow-sm border border-gold/15 text-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/5 dark:bg-gold/10 text-primary dark:text-gold flex items-center justify-center mx-auto mb-2">
                     <Award className="h-5 w-5" />
                   </div>
-                  <span className="block text-2xl font-bold text-neutral-900">15+</span>
-                  <span className="text-xs text-neutral-500 font-medium">Years Exp.</span>
+                  <span className="block text-2xl font-bold text-neutral-900 dark:text-white">15+</span>
+                  <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">{t("stats_exp")}</span>
                 </div>
               </div>
             </div>
@@ -180,7 +182,7 @@ export default function HomePage() {
             <div className="bg-neutral-950 text-white p-8 rounded-2xl shadow-xl gold-border relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full blur-2xl" />
               <h3 className="text-xl font-serif text-gold font-bold mb-6 flex items-center">
-                <Sparkles className="h-5 w-5 mr-2 text-gold" /> Why Choose Us
+                <Sparkles className="h-5 w-5 mr-2 text-gold" /> {t("why_us")}
               </h3>
               
               <div className="space-y-4">
@@ -189,8 +191,8 @@ export default function HomePage() {
                     <CheckCircle className="h-4 w-4" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm">Professional Team</h4>
-                    <p className="text-xs text-neutral-400 mt-0.5">Highly experienced decoration designers and structural technicians.</p>
+                    <h4 className="font-semibold text-sm">{t("why_team")}</h4>
+                    <p className="text-xs text-neutral-400 mt-0.5">{t("why_team_desc")}</p>
                   </div>
                 </div>
 
@@ -199,8 +201,8 @@ export default function HomePage() {
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm">Quality Materials</h4>
-                    <p className="text-xs text-neutral-400 mt-0.5">Spotless white curtains, premium quality carpets, and sturdy pipe sets.</p>
+                    <h4 className="font-semibold text-sm">{t("why_quality")}</h4>
+                    <p className="text-xs text-neutral-400 mt-0.5">{t("why_quality_desc")}</p>
                   </div>
                 </div>
 
@@ -209,8 +211,8 @@ export default function HomePage() {
                     <Clock className="h-4 w-4" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm">Timely Execution</h4>
-                    <p className="text-xs text-neutral-400 mt-0.5">Rigid setup deadlines to ensure decorations are ready long before the event begins.</p>
+                    <h4 className="font-semibold text-sm">{t("why_timely")}</h4>
+                    <p className="text-xs text-neutral-400 mt-0.5">{t("why_timely_desc")}</p>
                   </div>
                 </div>
 
@@ -219,8 +221,8 @@ export default function HomePage() {
                     <Heart className="h-4 w-4" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm">Affordable Pricing</h4>
-                    <p className="text-xs text-neutral-400 mt-0.5">Luxury wedding thematic setups at competitive local rates.</p>
+                    <h4 className="font-semibold text-sm">{t("why_affordable")}</h4>
+                    <p className="text-xs text-neutral-400 mt-0.5">{t("why_affordable_desc")}</p>
                   </div>
                 </div>
               </div>
@@ -230,18 +232,18 @@ export default function HomePage() {
       </section>
 
       {/* SERVICES PREVIEW */}
-      <section className="py-20 bg-white border-y border-gold/15">
+      <section className="py-20 bg-white dark:bg-neutral-950 border-y border-gold/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-primary font-bold text-xs uppercase tracking-wider block">
-              What We Offer
+            <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
+              {t("services_subtitle")}
             </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900">
-              Our Professional Rental & Decor Services
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900 dark:text-white">
+              {t("services_title")}
             </h2>
             <div className="w-24 h-1 bg-gold mx-auto" />
-            <p className="text-sm text-neutral-500">
-              Explore our wide range of services designed to fulfill all decoration and structural setup needs.
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              {t("services_desc")}
             </p>
           </div>
 
@@ -250,7 +252,7 @@ export default function HomePage() {
             {services.map((svc) => (
               <div
                 key={svc.id}
-                className="bg-cream rounded-2xl overflow-hidden shadow-sm border border-gold/15 hover:border-gold hover:shadow-md transition-all flex flex-col group"
+                className="bg-cream dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-sm border border-gold/15 hover:border-gold hover:shadow-md transition-all flex flex-col group"
               >
                 <div className="relative h-48 w-full overflow-hidden">
                   <Image
@@ -264,10 +266,10 @@ export default function HomePage() {
 
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
-                    <h3 className="font-serif text-lg font-bold text-neutral-900">
+                    <h3 className="font-serif text-lg font-bold text-neutral-900 dark:text-white">
                       {svc.name}
                     </h3>
-                    <p className="text-xs text-neutral-600 leading-relaxed font-sans">
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
                       {svc.description}
                     </p>
                   </div>
@@ -278,9 +280,9 @@ export default function HomePage() {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-2 bg-white hover:bg-primary hover:text-white border border-primary/20 text-primary rounded-xl text-xs font-bold text-center block transition-all uppercase tracking-wide"
+                    className="w-full py-2 bg-white dark:bg-neutral-800 hover:bg-primary dark:hover:bg-gold hover:text-white dark:hover:text-neutral-900 border border-primary/20 dark:border-gold/30 text-primary dark:text-gold rounded-xl text-xs font-bold text-center block transition-all uppercase tracking-wide"
                   >
-                    Quick Inquiry
+                    {t("quick_inquiry")}
                   </a>
                 </div>
               </div>
@@ -290,9 +292,9 @@ export default function HomePage() {
           <div className="text-center mt-12">
             <Link
               href="/services"
-              className="inline-flex items-center space-x-2 text-primary hover:text-primary-hover font-bold text-sm group"
+              className="inline-flex items-center space-x-2 text-primary dark:text-gold hover:text-primary-hover font-bold text-sm group"
             >
-              <span>View All 12 Services</span>
+              <span>{t("view_all_services")}</span>
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -300,18 +302,18 @@ export default function HomePage() {
       </section>
 
       {/* PACKAGES SECTION */}
-      <section className="py-20 bg-cream">
+      <section className="py-20 bg-cream dark:bg-neutral-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-primary font-bold text-xs uppercase tracking-wider block">
-              Budget Packages
+            <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
+              {t("packages_subtitle")}
             </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900">
-              Select A Royal Package Deal
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900 dark:text-white">
+              {t("packages_title")}
             </h2>
             <div className="w-24 h-1 bg-gold mx-auto" />
-            <p className="text-sm text-neutral-500">
-              Choose from our curated wedding packages designed for various budgets.
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              {t("packages_desc")}
             </p>
           </div>
 
@@ -324,18 +326,18 @@ export default function HomePage() {
                   key={pkg.id}
                   className={`rounded-2xl shadow-lg flex flex-col justify-between relative overflow-hidden transition-transform duration-300 hover:-translate-y-1 ${
                     isPopular
-                      ? "bg-neutral-950 text-white ring-2 ring-gold border-0"
-                      : "bg-white text-neutral-900 border border-gold/20"
+                      ? "bg-neutral-950 dark:bg-neutral-800 text-white ring-2 ring-gold border-0"
+                      : "bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white border border-gold/20"
                   }`}
                 >
                   {isPopular && (
                     <div className="absolute top-0 right-0 bg-gold text-neutral-950 text-[10px] font-extrabold px-3 py-1 uppercase rounded-bl-xl tracking-wider">
-                      Most Popular
+                      {t("most_popular")}
                     </div>
                   )}
 
                   <div className="p-8">
-                    <h3 className={`font-serif text-2xl font-bold ${isPopular ? "text-gold" : "text-primary"}`}>
+                    <h3 className={`font-serif text-2xl font-bold ${isPopular ? "text-gold" : "text-primary dark:text-gold"}`}>
                       {pkg.name}
                     </h3>
                     
@@ -343,14 +345,14 @@ export default function HomePage() {
                       <span className="text-3xl sm:text-4xl font-serif font-bold">
                         ₹{pkg.price.toLocaleString("en-IN")}
                       </span>
-                      <span className={`text-xs ml-1 ${isPopular ? "text-neutral-400" : "text-neutral-500"}`}>
+                      <span className={`text-xs ml-1 ${isPopular ? "text-neutral-400" : "text-neutral-500 dark:text-neutral-400"}`}>
                         / Event
                       </span>
                     </div>
 
-                    <div className={`w-full h-[1px] mb-6 ${isPopular ? "bg-neutral-800" : "bg-neutral-100"}`} />
+                    <div className={`w-full h-[1px] mb-6 ${isPopular ? "bg-neutral-800" : "bg-neutral-100 dark:bg-neutral-800"}`} />
 
-                    <h4 className="text-xs font-bold uppercase tracking-wider mb-3">Includes:</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-wider mb-3">{t("includes")}</h4>
                     <ul className="space-y-2.5">
                       {pkg.includes.map((inc, i) => (
                         <li key={i} className="flex items-center text-xs sm:text-sm">
@@ -370,7 +372,7 @@ export default function HomePage() {
                           : "bg-neutral-100 hover:bg-primary hover:text-white text-neutral-800 border border-neutral-200"
                       }`}
                     >
-                      Book {pkg.name}
+                      {t("book_package")} {pkg.name}
                     </Link>
                   </div>
                 </div>
@@ -381,14 +383,14 @@ export default function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 bg-white border-y border-gold/15">
+      <section className="py-20 bg-white dark:bg-neutral-950 border-y border-gold/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-primary font-bold text-xs uppercase tracking-wider block">
-              Testimonials
+            <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
+              {t("testimonials_subtitle")}
             </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900">
-              What Our Clients Say
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900 dark:text-white">
+              {t("testimonials_title")}
             </h2>
             <div className="w-24 h-1 bg-gold mx-auto" />
           </div>
@@ -397,7 +399,7 @@ export default function HomePage() {
             {reviews.map((rev) => (
               <div
                 key={rev.id}
-                className="bg-cream rounded-2xl p-8 border border-gold/15 shadow-sm space-y-4"
+                className="bg-cream dark:bg-neutral-900 rounded-2xl p-8 border border-gold/15 shadow-sm space-y-4"
               >
                 <div className="flex text-gold space-x-1">
                   {[...Array(5)].map((_, i) => (
@@ -410,7 +412,7 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                <p className="text-neutral-600 font-sans italic text-sm sm:text-base leading-relaxed">
+                <p className="text-neutral-600 dark:text-neutral-400 font-sans italic text-sm sm:text-base leading-relaxed">
                   &quot;{rev.comment}&quot;
                 </p>
 
@@ -419,10 +421,10 @@ export default function HomePage() {
                     {rev.customerName.charAt(0)}
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-sm text-neutral-900">
+                    <h4 className="font-serif font-bold text-sm text-neutral-900 dark:text-white">
                       {rev.customerName}
                     </h4>
-                    <span className="text-[10px] text-neutral-500">Verified Client</span>
+                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400">{t("verified_client")}</span>
                   </div>
                 </div>
               </div>
@@ -432,9 +434,9 @@ export default function HomePage() {
           <div className="text-center mt-12">
             <Link
               href="/reviews"
-              className="inline-flex items-center space-x-2 text-primary hover:text-primary-hover font-bold text-sm group"
+              className="inline-flex items-center space-x-2 text-primary dark:text-gold hover:text-primary-hover font-bold text-sm group"
             >
-              <span>Read More & Write A Review</span>
+              <span>{t("read_more_reviews")}</span>
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -446,10 +448,10 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.15),transparent)] pointer-events-none" />
         <div className="max-w-5xl mx-auto px-4 text-center space-y-6 relative z-10">
           <h2 className="text-2xl sm:text-4xl font-serif font-bold">
-            Planning An Auspicious Event?
+            {t("contact_banner_title")}
           </h2>
           <p className="text-neutral-200 text-sm sm:text-base max-w-2xl mx-auto">
-            Book our professional tent setups, gorgeous mandaps, and stage decorators today. Get in touch directly via Call or WhatsApp for a customized quote.
+            {t("contact_banner_desc")}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -458,7 +460,7 @@ export default function HomePage() {
               className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white hover:bg-neutral-100 text-primary font-bold text-sm flex items-center justify-center space-x-2 shadow-lg transition-transform hover:scale-105"
             >
               <Phone className="h-4 w-4" />
-              <span>Call: 9713661625</span>
+              <span>{t("call")}: 9713661625</span>
             </a>
             <a
               href="https://wa.me/917000297079"
@@ -467,7 +469,7 @@ export default function HomePage() {
               className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-lg transition-transform hover:scale-105"
             >
               <MessageSquare className="h-4 w-4 fill-white" />
-              <span>WhatsApp: 7000297079</span>
+              <span>{t("whatsapp")}: 7000297079</span>
             </a>
           </div>
         </div>

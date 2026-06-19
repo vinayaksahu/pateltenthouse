@@ -28,17 +28,17 @@ import {
 // ==========================================
 
 const DEFAULT_RENTAL_ITEMS: RentalItem[] = [
-  { id: "chairs", name: "Chairs", pricePerUnit: 15, unit: "piece", category: "Seating" },
-  { id: "lights", name: "Lights Setup", pricePerUnit: 100, unit: "light", category: "Lighting" },
-  { id: "coolers", name: "Cooler", pricePerUnit: 1500, unit: "cooler", category: "Cooling" },
-  { id: "stage", name: "Stage (Decoration & Setup)", pricePerUnit: 5000, unit: "set", category: "Decoration" },
-  { id: "mandap", name: "Mandap Set", pricePerUnit: 4000, unit: "set", category: "Decoration" },
-  { id: "gate", name: "Welcome Gate", pricePerUnit: 2000, unit: "gate", category: "Decoration" },
-  { id: "pipe_set", name: "Chandni Pipe Set", pricePerUnit: 500, unit: "set", category: "Structure" },
-  { id: "parda", name: "Curtains (Parda)", pricePerUnit: 100, unit: "piece", category: "Draping" },
-  { id: "carpet", name: "Carpet", pricePerUnit: 150, unit: "piece", category: "Flooring" },
-  { id: "dari", name: "Dari", pricePerUnit: 100, unit: "piece", category: "Flooring" },
-  { id: "balloon", name: "Balloon Decoration", pricePerUnit: 1500, unit: "event", category: "Decoration" },
+  { id: "chairs", name: "Chairs", nameHi: "कुर्सियां", pricePerUnit: 15, unit: "piece", category: "Seating" },
+  { id: "lights", name: "Lights Setup", nameHi: "लाइट्स सेटअप", pricePerUnit: 100, unit: "light", category: "Lighting" },
+  { id: "coolers", name: "Cooler", nameHi: "कूलर", pricePerUnit: 1500, unit: "cooler", category: "Cooling" },
+  { id: "stage", name: "Stage (Decoration & Setup)", nameHi: "मंच (सजावट और सेटअप)", pricePerUnit: 5000, unit: "set", category: "Decoration" },
+  { id: "mandap", name: "Mandap Set", nameHi: "मंडप सेट", pricePerUnit: 4000, unit: "set", category: "Decoration" },
+  { id: "gate", name: "Welcome Gate", nameHi: "स्वागत द्वार", pricePerUnit: 2000, unit: "gate", category: "Decoration" },
+  { id: "pipe_set", name: "Chandni Pipe Set", nameHi: "चांदनी पाइप सेट", pricePerUnit: 500, unit: "set", category: "Structure" },
+  { id: "parda", name: "Curtains (Parda)", nameHi: "पर्दा", pricePerUnit: 100, unit: "piece", category: "Draping" },
+  { id: "carpet", name: "Carpet", nameHi: "कालीन (कारपेट)", pricePerUnit: 150, unit: "piece", category: "Flooring" },
+  { id: "dari", name: "Dari", nameHi: "दरी", pricePerUnit: 100, unit: "piece", category: "Flooring" },
+  { id: "balloon", name: "Balloon Decoration", nameHi: "गुब्बारे की सजावट", pricePerUnit: 1500, unit: "event", category: "Decoration" },
 ];
 
 const DEFAULT_PACKAGES: Package[] = [

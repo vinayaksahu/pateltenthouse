@@ -155,18 +155,18 @@ function BookingFormContent() {
   const selectedDateStatus = form.eventDate ? getDateStatus(form.eventDate) : "available";
 
   return (
-    <div className="bg-cream min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-cream dark:bg-neutral-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-10">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-primary font-bold text-xs uppercase tracking-wider block">
+          <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
             Reservation
           </span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900">
+          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900 dark:text-white">
             Book Patel Tent House
           </h1>
           <div className="w-24 h-1 bg-gold mx-auto" />
-          <p className="text-sm text-neutral-500 font-sans">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 font-sans">
             Schedule decorations, seating structure, lighting sets, and event styling for your upcoming celebrations.
           </p>
         </div>
@@ -180,17 +180,17 @@ function BookingFormContent() {
               className="grid grid-cols-1 lg:grid-cols-3 gap-8"
             >
               {/* Form Input Block (Left 2 Columns) */}
-              <div className="lg:col-span-2 bg-white rounded-2xl p-6 sm:p-8 border border-gold/15 shadow-sm">
+              <div className="lg:col-span-2 bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 border border-gold/15 dark:border-gold/30 shadow-sm">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <h2 className="font-serif text-xl font-bold text-neutral-900 border-b pb-3 border-gold/10">
+                  <h2 className="font-serif text-xl font-bold text-neutral-900 dark:text-white border-b pb-3 border-gold/10 dark:border-gold/20">
                     Event Details & Client Information
                   </h2>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Name */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <User className="h-3.5 w-3.5 mr-1 text-primary" /> Full Name *
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <User className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Full Name *
                       </label>
                       <input
                         type="text"
@@ -198,14 +198,14 @@ function BookingFormContent() {
                         value={form.customerName}
                         onChange={(e) => setForm({ ...form, customerName: e.target.value })}
                         placeholder="Naresh Patel"
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800"
                       />
                     </div>
 
                     {/* Mobile */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <Phone className="h-3.5 w-3.5 mr-1 text-primary" /> Mobile Number *
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <Phone className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Mobile Number *
                       </label>
                       <input
                         type="tel"
@@ -213,61 +213,61 @@ function BookingFormContent() {
                         value={form.mobileNumber}
                         onChange={(e) => setForm({ ...form, mobileNumber: e.target.value })}
                         placeholder="9713661625"
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800"
                       />
                     </div>
 
                     {/* WhatsApp */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <Phone className="h-3.5 w-3.5 mr-1 text-primary" /> WhatsApp Number
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <Phone className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> WhatsApp Number
                       </label>
                       <input
                         type="tel"
                         value={form.whatsappNumber}
                         onChange={(e) => setForm({ ...form, whatsappNumber: e.target.value })}
                         placeholder="Leave blank to use mobile number"
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800"
                       />
                     </div>
 
                     {/* Village/City */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <MapPin className="h-3.5 w-3.5 mr-1 text-primary" /> Village / City
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <MapPin className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Village / City
                       </label>
                       <input
                         type="text"
                         value={form.villageCity}
                         onChange={(e) => setForm({ ...form, villageCity: e.target.value })}
                         placeholder="Jayramnagar"
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800"
                       />
                     </div>
 
                     {/* Full Address */}
                     <div className="sm:col-span-2 space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <MapPin className="h-3.5 w-3.5 mr-1 text-primary" /> Event Address & Location details
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <MapPin className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Event Address & Location details
                       </label>
                       <textarea
                         rows={2}
                         value={form.eventAddress}
                         onChange={(e) => setForm({ ...form, eventAddress: e.target.value })}
                         placeholder="Enter full landmark address, house details, etc."
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800"
                       />
                     </div>
 
                     {/* Event Type */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <PackageIcon className="h-3.5 w-3.5 mr-1 text-primary" /> Event Type
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <PackageIcon className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Event Type
                       </label>
                       <select
                         value={form.eventType}
                         onChange={(e) => setForm({ ...form, eventType: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800 bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800 bg-white"
                       >
                         <option>Wedding</option>
                         <option>Reception</option>
@@ -281,54 +281,54 @@ function BookingFormContent() {
 
                     {/* Expected Guests */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <Users className="h-3.5 w-3.5 mr-1 text-primary" /> Expected Guests
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <Users className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Expected Guests
                       </label>
                       <input
                         type="number"
                         value={form.expectedGuests}
                         onChange={(e) => setForm({ ...form, expectedGuests: Number(e.target.value) })}
                         placeholder="100"
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800"
                       />
                     </div>
 
                     {/* Event Date (prefills from calendar click) */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <CalendarIcon className="h-3.5 w-3.5 mr-1 text-primary" /> Event Date *
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <CalendarIcon className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Event Date *
                       </label>
                       <input
                         type="date"
                         required
                         value={form.eventDate}
                         onChange={(e) => setForm({ ...form, eventDate: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800 bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800 bg-white"
                       />
                     </div>
 
                     {/* Event Time */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <Clock className="h-3.5 w-3.5 mr-1 text-primary" /> Event Time
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <Clock className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Event Time
                       </label>
                       <input
                         type="time"
                         value={form.eventTime}
                         onChange={(e) => setForm({ ...form, eventTime: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800 bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800 bg-white"
                       />
                     </div>
 
                     {/* Package Type */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide flex items-center">
-                        <PackageIcon className="h-3.5 w-3.5 mr-1 text-primary" /> Package Type
+                      <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide flex items-center">
+                        <PackageIcon className="h-3.5 w-3.5 mr-1 text-primary dark:text-gold" /> Package Type
                       </label>
                       <select
                         value={form.packageType}
                         onChange={(e) => setForm({ ...form, packageType: e.target.value as any })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800 bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800 bg-white"
                       >
                         <option value="silver">Silver Package (₹8,000)</option>
                         <option value="gold">Gold Package (₹15,000)</option>
@@ -340,7 +340,7 @@ function BookingFormContent() {
 
                   {/* Requirements */}
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-neutral-700 uppercase tracking-wide">
+                    <label className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide">
                       Additional Requirements / Notes
                     </label>
                     <textarea
@@ -348,7 +348,7 @@ function BookingFormContent() {
                       value={form.additionalRequirements}
                       onChange={(e) => setForm({ ...form, additionalRequirements: e.target.value })}
                       placeholder="e.g. Extra coolers required, specific stage background colors, additional welcoming carpet length."
-                      className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-sm text-neutral-800"
+                      className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800"
                     />
                   </div>
 
@@ -375,29 +375,29 @@ function BookingFormContent() {
 
               {/* Availability Calendar Sidebar (Right 1 Column) */}
               <div className="space-y-6">
-                <div className="bg-white rounded-2xl p-6 border border-gold/15 shadow-sm space-y-4">
-                  <div className="flex justify-between items-center border-b pb-3 border-gold/10">
-                    <h2 className="font-serif text-lg font-bold text-neutral-900 flex items-center">
-                      <CalendarIcon className="h-4.5 w-4.5 mr-2 text-primary" /> Booking Calendar
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-gold/15 dark:border-gold/30 shadow-sm space-y-4">
+                  <div className="flex justify-between items-center border-b pb-3 border-gold/10 dark:border-gold/20">
+                    <h2 className="font-serif text-lg font-bold text-neutral-900 dark:text-white flex items-center">
+                      <CalendarIcon className="h-4.5 w-4.5 mr-2 text-primary dark:text-gold" /> Booking Calendar
                     </h2>
 
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={prevMonth}
-                        className="p-1 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-600"
+                        className="p-1 rounded-md border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </button>
                       <button
                         onClick={nextMonth}
-                        className="p-1 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-600"
+                        className="p-1 rounded-md border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
                       >
                         <ChevronRight className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
 
-                  <div className="text-center font-serif font-bold text-sm text-neutral-800">
+                  <div className="text-center font-serif font-bold text-sm text-neutral-800 dark:text-neutral-200">
                     {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
                   </div>
 
@@ -432,13 +432,13 @@ function BookingFormContent() {
                       const status = getDateStatus(formattedDate);
                       const isSelected = form.eventDate === formattedDate;
 
-                      let bgClass = "bg-green-50 text-green-700 hover:bg-green-100 border border-green-200/50";
+                      let bgClass = "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 border border-green-200/50 dark:border-green-800/50";
                       if (status === "booked") {
-                        bgClass = "bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200/50";
+                        bgClass = "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200/50 dark:border-rose-800/50";
                       } else if (status === "blocked") {
-                        bgClass = "bg-neutral-100 text-neutral-400 border border-neutral-200/50 cursor-not-allowed";
+                        bgClass = "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 border border-neutral-200/50 dark:border-neutral-700/50 cursor-not-allowed";
                       } else if (status === "pending") {
-                        bgClass = "bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200/50";
+                        bgClass = "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40 border border-amber-200/50 dark:border-amber-800/50";
                       }
 
                       if (isSelected) {
@@ -460,7 +460,7 @@ function BookingFormContent() {
                   </div>
 
                   {/* Calendar Legend */}
-                  <div className="border-t border-neutral-100 pt-3 text-[10px] sm:text-xs grid grid-cols-3 gap-2">
+                  <div className="border-t border-neutral-100 dark:border-neutral-800 pt-3 text-[10px] sm:text-xs grid grid-cols-3 gap-2">
                     <div className="flex items-center space-x-1.5">
                       <div className="w-2.5 h-2.5 rounded-full bg-green-500 border border-green-600" />
                       <span className="text-neutral-500 font-medium">Available</span>
@@ -482,20 +482,20 @@ function BookingFormContent() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="max-w-2xl mx-auto bg-white rounded-2xl p-8 border-2 border-gold/40 shadow-xl text-center space-y-6"
+              className="max-w-2xl mx-auto bg-white dark:bg-neutral-900 rounded-2xl p-8 border-2 border-gold/40 shadow-xl text-center space-y-6"
             >
               <div className="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto shadow-md">
                 <CheckCircle className="h-10 w-10" />
               </div>
               
               <div className="space-y-2">
-                <h2 className="font-serif text-2xl font-bold text-neutral-900">
+                <h2 className="font-serif text-2xl font-bold text-neutral-900 dark:text-white">
                   Booking Request Submitted!
                 </h2>
                 <p className="text-xs text-gold font-bold uppercase tracking-wider">
                   Reference ID: {createdId}
                 </p>
-                <p className="text-sm text-neutral-600 max-w-md mx-auto leading-relaxed">
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-md mx-auto leading-relaxed">
                   Your booking request for a <strong>{form.eventType}</strong> event on <strong>{form.eventDate}</strong> has been successfully recorded. Our management team will contact you shortly to confirm the setup details.
                 </p>
               </div>

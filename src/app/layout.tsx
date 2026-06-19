@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Outfit } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import FloatingCTA from "@/components/FloatingCTA";
+import AppLayout from "@/components/AppLayout";
 
 import { Providers } from "@/components/Providers";
 
@@ -95,18 +93,9 @@ export default function RootLayout({
               `
             }}
           />
-          <Header />
-          <main className="flex-grow pt-16 sm:pt-20">
-            {children}
-          </main>
-          <Footer />
-          <FloatingCTA />
+          <AppLayout>{children}</AppLayout>
         </Providers>
       </body>
     </html>
   );
 }
-
-
-
-

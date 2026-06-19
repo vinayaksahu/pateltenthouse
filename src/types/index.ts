@@ -1,6 +1,7 @@
 export interface RentalItem {
   id: string;
   name: string;
+  nameHi?: string; // Hindi name
   pricePerUnit: number;
   unit: string; // e.g., "piece", "set", "day"
   category: string;

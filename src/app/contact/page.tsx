@@ -38,18 +38,18 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="bg-cream min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-cream dark:bg-neutral-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-primary font-bold text-xs uppercase tracking-wider block">
+          <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
             Get In Touch
           </span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900">
+          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900 dark:text-white">
             Contact Patel Tent House
           </h1>
           <div className="w-24 h-1 bg-gold mx-auto" />
-          <p className="text-sm text-neutral-500 font-sans">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 font-sans">
             Ready to secure your booking or have specific decoration questions? Connect with our event managers Naresh and Kamlesh.
           </p>
         </div>
@@ -58,20 +58,20 @@ export default function ContactPage() {
           {/* Contact Details (Left 1 Column) */}
           <div className="lg:col-span-1 space-y-6">
             {/* Info Card */}
-            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gold/15 shadow-sm space-y-6">
-              <h2 className="font-serif text-lg font-bold text-neutral-900 border-b pb-3 border-gold/10">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 border border-gold/15 dark:border-gold/30 shadow-sm space-y-6">
+              <h2 className="font-serif text-lg font-bold text-neutral-900 dark:text-white border-b pb-3 border-gold/10 dark:border-gold/20">
                 Business Details
               </h2>
 
               <div className="space-y-5 text-xs sm:text-sm">
                 {/* Location */}
                 <div className="flex items-start space-x-3.5">
-                  <div className="mt-0.5 bg-primary/10 p-2 rounded-full text-primary shrink-0">
+                  <div className="mt-0.5 bg-primary/10 dark:bg-gold/10 p-2 rounded-full text-primary dark:text-gold shrink-0">
                     <MapPin className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-neutral-800">Business Location</h3>
-                    <p className="text-neutral-500 mt-1 leading-relaxed">
+                    <h3 className="font-bold text-neutral-800 dark:text-neutral-200">Business Location</h3>
+                    <p className="text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">
                       Gram Bhelai, PO Jayramnagar,<br />
                       Bilaspur, Chhattisgarh, India
                     </p>
@@ -80,16 +80,16 @@ export default function ContactPage() {
 
                 {/* Contacts */}
                 <div className="flex items-start space-x-3.5">
-                  <div className="mt-0.5 bg-primary/10 p-2 rounded-full text-primary shrink-0">
+                  <div className="mt-0.5 bg-primary/10 dark:bg-gold/10 p-2 rounded-full text-primary dark:text-gold shrink-0">
                     <Phone className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-neutral-800">Call / Contacts</h3>
-                    <div className="flex flex-col mt-1 text-neutral-500 space-y-1">
-                      <a href="tel:9713661625" className="hover:text-primary transition-colors">
+                    <h3 className="font-bold text-neutral-800 dark:text-neutral-200">Call / Contacts</h3>
+                    <div className="flex flex-col mt-1 text-neutral-500 dark:text-neutral-400 space-y-1">
+                      <a href="tel:9713661625" className="hover:text-primary dark:hover:text-gold transition-colors">
                         Naresh Kumar Patel: <strong>9713661625</strong>
                       </a>
-                      <a href="tel:7000297079" className="hover:text-primary transition-colors">
+                      <a href="tel:7000297079" className="hover:text-primary dark:hover:text-gold transition-colors">
                         Kamlesh Kumar Patel: <strong>7000297079</strong>
                       </a>
                     </div>
@@ -98,13 +98,13 @@ export default function ContactPage() {
 
                 {/* Email */}
                 <div className="flex items-start space-x-3.5">
-                  <div className="mt-0.5 bg-primary/10 p-2 rounded-full text-primary shrink-0">
+                  <div className="mt-0.5 bg-primary/10 dark:bg-gold/10 p-2 rounded-full text-primary dark:text-gold shrink-0">
                     <Mail className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-neutral-800">Email Address</h3>
-                    <p className="text-neutral-500 mt-1">
-                      <a href="mailto:info@pateltenthouse.com" className="hover:text-primary transition-colors">
+                    <h3 className="font-bold text-neutral-800 dark:text-neutral-200">Email Address</h3>
+                    <p className="text-neutral-500 dark:text-neutral-400 mt-1">
+                      <a href="mailto:info@pateltenthouse.com" className="hover:text-primary dark:hover:text-gold transition-colors">
                         info@pateltenthouse.com
                       </a>
                     </p>
@@ -113,12 +113,12 @@ export default function ContactPage() {
 
                 {/* Business Hours */}
                 <div className="flex items-start space-x-3.5">
-                  <div className="mt-0.5 bg-primary/10 p-2 rounded-full text-primary shrink-0">
+                  <div className="mt-0.5 bg-primary/10 dark:bg-gold/10 p-2 rounded-full text-primary dark:text-gold shrink-0">
                     <Clock className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-neutral-800">Operating Hours</h3>
-                    <p className="text-neutral-500 mt-1">
+                    <h3 className="font-bold text-neutral-800 dark:text-neutral-200">Operating Hours</h3>
+                    <p className="text-neutral-500 dark:text-neutral-400 mt-1">
                       Open 24 Hours / 7 Days<br />
                       <span className="text-[10px] text-gold font-semibold uppercase tracking-wider block mt-1">
                         (Active during wedding seasons)
@@ -129,10 +129,10 @@ export default function ContactPage() {
               </div>
 
               {/* Direct Buttons */}
-              <div className="space-y-3 pt-4 border-t border-neutral-100">
+              <div className="space-y-3 pt-4 border-t border-neutral-100 dark:border-neutral-800">
                 <a
                   href="tel:9713661625"
-                  className="w-full py-2.5 rounded-xl border border-primary text-primary font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 hover:bg-primary hover:text-white transition-all cursor-pointer"
+                  className="w-full py-2.5 rounded-xl border border-primary dark:border-gold text-primary dark:text-gold font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 hover:bg-primary dark:hover:bg-gold hover:text-white dark:hover:text-neutral-900 transition-all cursor-pointer"
                 >
                   <Phone className="h-4 w-4" />
                   <span>Call Naresh</span>
@@ -150,7 +150,7 @@ export default function ContactPage() {
                   href="https://maps.google.com/?q=Jayramnagar+Bilaspur+Chhattisgarh"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all cursor-pointer border border-neutral-200"
+                  className="w-full py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all cursor-pointer border border-neutral-200 dark:border-neutral-700"
                 >
                   <Map className="h-4 w-4 text-gold" />
                   <span>View Google Maps</span>
@@ -161,8 +161,8 @@ export default function ContactPage() {
 
           {/* Quick Inquiry Form & Maps Iframe (Right 2 Columns) */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gold/15 shadow-sm space-y-6">
-              <h2 className="font-serif text-xl font-bold text-neutral-900 border-b pb-3 border-gold/10">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 border border-gold/15 dark:border-gold/30 shadow-sm space-y-6">
+              <h2 className="font-serif text-xl font-bold text-neutral-900 dark:text-white border-b pb-3 border-gold/10 dark:border-gold/20">
                 Send Direct Message
               </h2>
 
@@ -177,35 +177,35 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-4 text-xs sm:text-sm">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="font-semibold text-neutral-700">Your Name *</label>
+                      <label className="font-semibold text-neutral-700 dark:text-neutral-300">Your Name *</label>
                       <input
                         type="text"
                         required
                         value={inquiry.name}
                         onChange={(e) => setInquiry({ ...inquiry, name: e.target.value })}
                         placeholder="Naresh Patel"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-neutral-800"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-neutral-800"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="font-semibold text-neutral-700">Phone Number *</label>
+                      <label className="font-semibold text-neutral-700 dark:text-neutral-300">Phone Number *</label>
                       <input
                         type="tel"
                         required
                         value={inquiry.phone}
                         onChange={(e) => setInquiry({ ...inquiry, phone: e.target.value })}
                         placeholder="9713661625"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-neutral-800"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-neutral-800"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="font-semibold text-neutral-700">Inquiry Subject</label>
+                    <label className="font-semibold text-neutral-700 dark:text-neutral-300">Inquiry Subject</label>
                     <select
                       value={inquiry.subject}
                       onChange={(e) => setInquiry({ ...inquiry, subject: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-neutral-800 bg-white"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-neutral-800 bg-white"
                     >
                       <option>Booking Query</option>
                       <option>Custom Quotation</option>
@@ -215,14 +215,14 @@ export default function ContactPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="font-semibold text-neutral-700">Message / Inquiry Details *</label>
+                    <label className="font-semibold text-neutral-700 dark:text-neutral-300">Message / Inquiry Details *</label>
                     <textarea
                       rows={4}
                       required
                       value={inquiry.message}
                       onChange={(e) => setInquiry({ ...inquiry, message: e.target.value })}
                       placeholder="Write your event dates and required items (Chairs, Stage details)..."
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-neutral-800"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-neutral-800"
                     />
                   </div>
 
@@ -247,7 +247,7 @@ export default function ContactPage() {
                 allowFullScreen
                 loading="lazy"
               />
-              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-semibold gold-border shadow-md text-neutral-800">
+              <div className="absolute bottom-4 left-4 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-semibold gold-border shadow-md text-neutral-800 dark:text-neutral-200">
                 Gram Bhelai, PO Jayramnagar, Bilaspur, CG
               </div>
             </div>

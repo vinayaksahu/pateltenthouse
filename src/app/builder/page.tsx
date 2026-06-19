@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getSettings } from "@/lib/db";
 import { RentalItem, BusinessSettings } from "@/types";
+import { useLanguage } from "@/context/LanguageContext";
 import {
   Plus,
   Minus,
@@ -20,6 +21,7 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
 export default function CustomPackageBuilder() {
+  const { language } = useLanguage();
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
   const [items, setItems] = useState<RentalItem[]>([]);
   
@@ -283,14 +285,14 @@ export default function CustomPackageBuilder() {
   };
 
   return (
-    <div className="bg-cream min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-cream dark:bg-neutral-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-10">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-primary font-bold text-xs uppercase tracking-wider block">
+          <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
             Custom Package
           </span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900">
+          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900 dark:text-white">
             Interactive Rental Builder
           </h1>
           <div className="w-24 h-1 bg-gold mx-auto" />
@@ -342,7 +344,7 @@ export default function CustomPackageBuilder() {
                     ))}
                   </div>
                   <div className="text-xs border-t border-neutral-800 pt-2 flex justify-between mt-2">
-                    <span>Suggested Total:</span>
+                    <span className="text-white">Suggested Total:</span>
                     <strong className="text-gold">₹{budgetSuggestion.total.toLocaleString("en-IN")}</strong>
                   </div>
                 </div>
@@ -379,21 +381,22 @@ export default function CustomPackageBuilder() {
             </AnimatePresence>
 
             {/* Rental Items List */}
-            <div className="bg-white rounded-2xl p-6 border border-gold/15 shadow-sm space-y-4">
-              <h2 className="font-serif text-xl font-bold text-neutral-900 flex items-center">
-                <ShoppingBag className="h-5 w-5 mr-2 text-primary" /> Choose Rental Items & Quantities
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-gold/15 dark:border-gold/30 shadow-sm space-y-4">
+              <h2 className="font-serif text-xl font-bold text-neutral-900 dark:text-white flex items-center">
+                <ShoppingBag className="h-5 w-5 mr-2 text-primary dark:text-gold" /> Choose Rental Items & Quantities
               </h2>
               
-              <div className="divide-y divide-neutral-100">
+              <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
                 {items.map((item) => {
                   const qty = selectedQuantities[item.id] || 0;
+                  const itemName = language === 'hi' && item.nameHi ? item.nameHi : item.name;
                   return (
                     <div key={item.id} className="py-3.5 flex items-center justify-between">
                       <div>
-                        <h3 className="font-semibold text-neutral-900 text-sm sm:text-base">
-                          {item.name}
+                        <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm sm:text-base">
+                          {itemName}
                         </h3>
-                        <span className="text-xs text-neutral-500">
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400">
                           ₹{item.pricePerUnit} / {item.unit}
                         </span>
                       </div>
@@ -412,7 +415,7 @@ export default function CustomPackageBuilder() {
                           <Minus className="h-3.5 w-3.5" />
                         </button>
                         
-                        <span className="w-8 text-center font-bold text-sm sm:text-base text-neutral-800">
+                        <span className="w-8 text-center font-bold text-sm sm:text-base text-neutral-800 dark:text-neutral-200">
                           {qty}
                         </span>
 
@@ -433,10 +436,10 @@ export default function CustomPackageBuilder() {
           {/* Calculator Sidebar (Right 1 Column) */}
           <div className="space-y-6">
             {/* Live Estimator Card */}
-            <div className="bg-white rounded-2xl p-6 border-2 border-gold/30 shadow-md space-y-6 sticky top-24">
-              <div className="border-b pb-4 border-gold/15 flex justify-between items-center">
-                <h2 className="font-serif text-lg font-bold text-neutral-900 flex items-center">
-                  <Calculator className="h-4.5 w-4.5 mr-2 text-primary" /> Live Calculator
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border-2 border-gold/30 shadow-md space-y-6 sticky top-24 transition-colors">
+              <div className="border-b pb-4 border-gold/15 dark:border-gold/30 flex justify-between items-center">
+                <h2 className="font-serif text-lg font-bold text-neutral-900 dark:text-white flex items-center">
+                  <Calculator className="h-4.5 w-4.5 mr-2 text-primary dark:text-gold" /> Live Calculator
                 </h2>
                 
                 {selectedItemsList.length > 0 && (
@@ -457,21 +460,23 @@ export default function CustomPackageBuilder() {
                     No items selected yet. Adjust quantities to calculate pricing.
                   </p>
                 ) : (
-                  selectedItemsList.map((si) => (
+                  selectedItemsList.map((si) => {
+                    const itemName = language === 'hi' && si.item.nameHi ? si.item.nameHi : si.item.name;
+                    return (
                     <div key={si.item.id} className="flex justify-between items-start text-xs">
                       <div>
-                        <span className="font-semibold text-neutral-800">{si.item.name}</span>
-                        <div className="text-[10px] text-neutral-500">
+                        <span className="font-semibold text-neutral-800 dark:text-neutral-200">{itemName}</span>
+                        <div className="text-[10px] text-neutral-500 dark:text-neutral-400">
                           {si.quantity} x ₹{si.item.pricePerUnit}
                         </div>
                       </div>
-                      <span className="font-bold text-neutral-900">₹{si.total.toLocaleString("en-IN")}</span>
+                      <span className="font-bold text-neutral-900 dark:text-white">₹{si.total.toLocaleString("en-IN")}</span>
                     </div>
-                  ))
+                  )})
                 )}
               </div>
 
-              <div className="border-t border-neutral-100 pt-4 space-y-3">
+              <div className="border-t border-neutral-100 dark:border-neutral-800 pt-4 space-y-3">
                 {/* GST Toggle */}
                 <div className="flex items-center justify-between text-xs pb-1">
                   <span className="text-neutral-500 font-medium flex items-center">
@@ -486,8 +491,8 @@ export default function CustomPackageBuilder() {
                 </div>
 
                 <div className="flex justify-between text-xs">
-                  <span className="text-neutral-500">Subtotal</span>
-                  <span className="font-bold">₹{subtotal.toLocaleString("en-IN")}</span>
+                  <span className="text-neutral-500 dark:text-neutral-400">Subtotal</span>
+                  <span className="font-bold dark:text-white">₹{subtotal.toLocaleString("en-IN")}</span>
                 </div>
 
                 {includeGST && (
@@ -497,22 +502,22 @@ export default function CustomPackageBuilder() {
                   </div>
                 )}
 
-                <div className="border-t border-neutral-200 pt-3 flex justify-between items-baseline">
-                  <span className="font-serif font-bold text-sm text-neutral-900">Grand Total</span>
-                  <span className="font-serif font-extrabold text-xl text-primary">
+                <div className="border-t border-neutral-200 dark:border-neutral-800 pt-3 flex justify-between items-baseline">
+                  <span className="font-serif font-bold text-sm text-neutral-900 dark:text-white">Grand Total</span>
+                  <span className="font-serif font-extrabold text-xl text-primary dark:text-gold">
                     ₹{grandTotal.toLocaleString("en-IN")}
                   </span>
                 </div>
               </div>
 
               {/* Form client info */}
-              <div className="space-y-3 border-t border-neutral-100 pt-4">
+              <div className="space-y-3 border-t border-neutral-100 dark:border-neutral-800 pt-4">
                 <input
                   type="text"
                   placeholder="Your Name (Required)"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-gold"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold"
                   required
                 />
                 <input
@@ -520,7 +525,7 @@ export default function CustomPackageBuilder() {
                   placeholder="Your Phone Number"
                   value={clientPhone}
                   onChange={(e) => setClientPhone(e.target.value)}
-                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-gold"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold"
                 />
               </div>
 
@@ -543,8 +548,8 @@ export default function CustomPackageBuilder() {
                   disabled={selectedItemsList.length === 0}
                   className={`w-full py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 border transition-all ${
                     selectedItemsList.length === 0
-                      ? "bg-white text-neutral-300 border-neutral-200 cursor-not-allowed"
-                      : "bg-white text-primary border-primary hover:bg-primary/5 hover:scale-105"
+                      ? "bg-white dark:bg-neutral-900 text-neutral-300 dark:text-neutral-600 border-neutral-200 dark:border-neutral-800 cursor-not-allowed"
+                      : "bg-white dark:bg-neutral-900 text-primary dark:text-gold border-primary dark:border-gold hover:bg-primary/5 dark:hover:bg-gold/10 hover:scale-105"
                   }`}
                 >
                   <Download className="h-4 w-4" />

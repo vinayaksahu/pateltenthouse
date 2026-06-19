@@ -68,24 +68,24 @@ export default function GalleryPage() {
   }, [selectedIdx, filteredItems]);
 
   return (
-    <div className="bg-cream min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-cream dark:bg-neutral-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-10">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-primary font-bold text-xs uppercase tracking-wider block">
+          <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
             Portfolio
           </span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900">
+          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900 dark:text-white">
             Decoration Gallery
           </h1>
           <div className="w-24 h-1 bg-gold mx-auto" />
-          <p className="text-sm text-neutral-500 font-sans">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 font-sans">
             Feast your eyes on some of our premium custom setups, grand entry archways, sparkling lightings, and royal mandaps in Bilaspur.
           </p>
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-2 border-b border-gold/15 pb-6">
+        <div className="flex flex-wrap items-center justify-center gap-2 border-b border-gold/15 dark:border-gold/30 pb-6">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
@@ -96,7 +96,7 @@ export default function GalleryPage() {
               className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all border cursor-pointer ${
                 activeCategory === cat.id
                   ? "royal-red-gradient text-white border-primary shadow-sm"
-                  : "bg-white text-neutral-600 border-neutral-200 hover:border-gold hover:text-primary"
+                  : "bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-neutral-800 hover:border-gold dark:hover:border-gold hover:text-primary dark:hover:text-gold"
               }`}
             >
               {cat.name}
@@ -118,7 +118,7 @@ export default function GalleryPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="group relative h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gold/15 cursor-pointer bg-white"
+                className="group relative h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gold/15 dark:border-gold/30 cursor-pointer bg-white dark:bg-neutral-900"
                 onClick={() => openLightbox(item.id)}
               >
                 <Image

@@ -19,18 +19,18 @@ export default function PackagesPage() {
   }, []);
 
   return (
-    <div className="bg-cream min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-cream dark:bg-neutral-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-primary font-bold text-xs uppercase tracking-wider block">
+          <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
             Flexible Pricing
           </span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900">
+          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900 dark:text-white">
             Our Standard Rental Packages
           </h1>
           <div className="w-24 h-1 bg-gold mx-auto" />
-          <p className="text-sm sm:text-base text-neutral-500 font-sans">
+          <p className="text-sm sm:text-base text-neutral-500 dark:text-neutral-400 font-sans">
             Choose from our pre-configured luxury event packages. Each package represents a balanced combination of tents, stage, chairs, and styling assets.
           </p>
         </div>
@@ -48,7 +48,7 @@ export default function PackagesPage() {
                 className={`rounded-2xl shadow-xl flex flex-col justify-between relative overflow-hidden transition-all hover:-translate-y-1 duration-300 ${
                   isPopular
                     ? "bg-neutral-950 text-white ring-2 ring-gold border-0"
-                    : "bg-white text-neutral-900 border border-gold/15"
+                    : "bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white border border-gold/15 dark:border-gold/30"
                 }`}
               >
                 {isPopular && (
@@ -71,14 +71,14 @@ export default function PackagesPage() {
                     </span>
                   </div>
 
-                  <div className={`w-full h-[1px] mb-6 ${isPopular ? "bg-neutral-800" : "bg-neutral-100"}`} />
+                  <div className={`w-full h-[1px] mb-6 ${isPopular ? "bg-neutral-800" : "bg-neutral-100 dark:bg-neutral-800"}`} />
 
                   <h4 className="text-xs font-bold uppercase tracking-wider mb-3">What&apos;s Included:</h4>
                   <ul className="space-y-3">
                     {pkg.includes.map((inc, i) => (
                       <li key={i} className="flex items-center text-xs sm:text-sm">
                         <CheckCircle className="h-4 w-4 text-gold mr-3 shrink-0" />
-                        <span className={isPopular ? "text-neutral-300" : "text-neutral-700"}>
+                        <span className={isPopular ? "text-neutral-300" : "text-neutral-700 dark:text-neutral-300"}>
                           {inc}
                         </span>
                       </li>
@@ -92,7 +92,7 @@ export default function PackagesPage() {
                     className={`w-full py-3.5 rounded-full text-center font-bold text-xs uppercase tracking-wider block transition-all ${
                       isPopular
                         ? "royal-red-gradient text-white hover:shadow-lg gold-border hover:scale-105"
-                        : "bg-neutral-100 hover:bg-primary hover:text-white text-neutral-800 border border-neutral-200 hover:scale-105"
+                        : "bg-neutral-100 dark:bg-neutral-800 hover:bg-primary dark:hover:bg-gold dark:hover:text-neutral-900 hover:text-white text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 hover:scale-105"
                     }`}
                   >
                     Book {pkg.name}
@@ -104,12 +104,12 @@ export default function PackagesPage() {
         </div>
 
         {/* Comparison Table Section */}
-        <div className="bg-white rounded-2xl p-6 sm:p-10 border border-gold/15 shadow-sm space-y-6">
-          <div className="border-b pb-4 border-gold/10">
-            <h2 className="font-serif text-2xl font-bold text-neutral-900">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-10 border border-gold/15 dark:border-gold/30 shadow-sm space-y-6">
+          <div className="border-b pb-4 border-gold/10 dark:border-gold/20">
+            <h2 className="font-serif text-2xl font-bold text-neutral-900 dark:text-white">
               Compare Packages
             </h2>
-            <p className="text-xs text-neutral-500 mt-1">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
               Select the package that fits your event scale. Need something unique? Try our custom package builder.
             </p>
           </div>
@@ -117,14 +117,14 @@ export default function PackagesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
-                <tr className="border-b border-neutral-200 bg-cream">
-                  <th className="py-3 px-4 font-serif font-bold text-neutral-700">Rental Item</th>
-                  <th className="py-3 px-4 font-serif font-bold text-neutral-700 text-center">Silver</th>
-                  <th className="py-3 px-4 font-serif font-bold text-neutral-700 text-center">Gold</th>
-                  <th className="py-3 px-4 font-serif font-bold text-neutral-700 text-center">Premium</th>
+                <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-cream dark:bg-neutral-950">
+                  <th className="py-3 px-4 font-serif font-bold text-neutral-700 dark:text-neutral-300">Rental Item</th>
+                  <th className="py-3 px-4 font-serif font-bold text-neutral-700 dark:text-neutral-300 text-center">Silver</th>
+                  <th className="py-3 px-4 font-serif font-bold text-neutral-700 dark:text-neutral-300 text-center">Gold</th>
+                  <th className="py-3 px-4 font-serif font-bold text-neutral-700 dark:text-neutral-300 text-center">Premium</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100 text-neutral-700">
+              <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800 text-neutral-700 dark:text-neutral-400">
                 <tr>
                   <td className="py-3 px-4 font-medium">Chandni Pipe Set</td>
                   <td className="py-3 px-4 text-center">4 Sets</td>

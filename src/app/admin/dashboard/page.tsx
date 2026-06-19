@@ -254,7 +254,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="bg-cream min-h-screen">
       {/* Admin Navbar */}
-      <div className="bg-neutral-950 text-white py-4 px-6 border-b border-gold/30 flex justify-between items-center">
+      <div className="bg-neutral-950 text-white py-3 px-6 border-b border-gold/30 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full royal-red-gradient flex items-center justify-center gold-border">
             <Lock className="h-4 w-4 text-gold" />
@@ -274,7 +274,7 @@ export default function AdminDashboardPage() {
         </button>
       </div>
 
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar Navigation */}
         <div className="lg:col-span-1 bg-white rounded-2xl border border-gold/15 p-5 shadow-sm space-y-4 h-fit">
           <h2 className="font-serif text-sm font-bold text-neutral-500 uppercase tracking-widest mb-2 border-b pb-2">
@@ -772,7 +772,7 @@ export default function AdminDashboardPage() {
 
                   <button
                     onClick={() => {
-                      setEditingItem({ id: `item_${Math.floor(100 + Math.random() * 900)}`, name: "", pricePerUnit: 0, unit: "piece", category: "Decoration" });
+                      setEditingItem({ id: `item_${Math.floor(100 + Math.random() * 900)}`, name: "", nameHi: "", pricePerUnit: 0, unit: "piece", category: "Decoration" });
                       setNewItemModal(true);
                     }}
                     className="flex items-center space-x-1.5 px-3 py-2 rounded-xl royal-red-gradient text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer gold-border"
@@ -834,16 +834,29 @@ export default function AdminDashboardPage() {
                       </h3>
 
                       <form onSubmit={handleSaveRentalItem} className="space-y-4 text-xs sm:text-sm">
-                        <div className="space-y-1">
-                          <label className="font-bold text-neutral-700">Item Name</label>
-                          <input
-                            type="text"
-                            required
-                            value={editingItem.name}
-                            onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
-                            placeholder="e.g. Chairs, Stage decoration"
-                            className="w-full px-3 py-2 rounded-xl border border-neutral-200 focus:outline-none"
-                          />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <label className="font-bold text-neutral-700">Item Name (English)</label>
+                            <input
+                              type="text"
+                              required
+                              value={editingItem.name}
+                              onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
+                              placeholder="e.g. Chairs, Stage decoration"
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 focus:outline-none"
+                            />
+                          </div>
+                          
+                          <div className="space-y-1">
+                            <label className="font-bold text-neutral-700">Item Name (Hindi)</label>
+                            <input
+                              type="text"
+                              value={editingItem.nameHi || ""}
+                              onChange={(e) => setEditingItem({ ...editingItem, nameHi: e.target.value })}
+                              placeholder="e.g. कुर्सियां, मंच"
+                              className="w-full px-3 py-2 rounded-xl border border-neutral-200 focus:outline-none"
+                            />
+                          </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">

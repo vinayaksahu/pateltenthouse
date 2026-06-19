@@ -59,26 +59,26 @@ export default function ReviewsPage() {
   };
 
   return (
-    <div className="bg-cream min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-cream dark:bg-neutral-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-primary font-bold text-xs uppercase tracking-wider block">
+          <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
             Testimonials
           </span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900">
+          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900 dark:text-white">
             Reviews & Customer Feedback
           </h1>
           <div className="w-24 h-1 bg-gold mx-auto" />
-          <p className="text-sm text-neutral-500 font-sans">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 font-sans">
             Hear from our satisfied clients about their experiences, or submit your own review to help us keep improving.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Submit Review Card (Right/Left Column) */}
-          <div className="lg:col-span-1 bg-white rounded-2xl p-6 sm:p-8 border border-gold/15 shadow-sm space-y-5 h-fit lg:sticky lg:top-24">
-            <h2 className="font-serif text-lg font-bold text-neutral-900 border-b pb-3 border-gold/10">
+          {/* Submit Review Card (Right Column) */}
+          <div className="lg:col-span-1 bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 border border-gold/15 dark:border-gold/30 shadow-sm space-y-5 h-fit lg:sticky lg:top-24 order-2 lg:order-2">
+            <h2 className="font-serif text-lg font-bold text-neutral-900 dark:text-white border-b pb-3 border-gold/10 dark:border-gold/20">
               Submit Your Review
             </h2>
 
@@ -93,20 +93,20 @@ export default function ReviewsPage() {
                   className="space-y-4 text-xs sm:text-sm"
                 >
                   <div className="space-y-1">
-                    <label className="font-semibold text-neutral-700">Full Name</label>
+                    <label className="font-semibold text-neutral-700 dark:text-neutral-300">Full Name</label>
                     <input
                       type="text"
                       required
                       value={form.customerName}
                       onChange={(e) => setForm({ ...form, customerName: e.target.value })}
                       placeholder="Enter your name"
-                      className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-neutral-800"
+                      className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-neutral-800"
                     />
                   </div>
 
                   {/* Rating Selector */}
                   <div className="space-y-1">
-                    <label className="font-semibold text-neutral-700 block">Rating</label>
+                    <label className="font-semibold text-neutral-700 dark:text-neutral-300 block">Rating</label>
                     <div className="flex items-center space-x-1.5 pt-1">
                       {[...Array(5)].map((_, i) => {
                         const starValue = i + 1;
@@ -123,7 +123,7 @@ export default function ReviewsPage() {
                               className={`h-6 w-6 ${
                                 starValue <= (hoverRating || form.rating)
                                   ? "fill-gold text-gold"
-                                  : "text-neutral-200"
+                                  : "text-neutral-200 dark:text-neutral-700"
                               }`}
                             />
                           </button>
@@ -133,14 +133,14 @@ export default function ReviewsPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="font-semibold text-neutral-700">Comment / Review</label>
+                    <label className="font-semibold text-neutral-700 dark:text-neutral-300">Comment / Review</label>
                     <textarea
                       rows={4}
                       required
                       value={form.comment}
                       onChange={(e) => setForm({ ...form, comment: e.target.value })}
                       placeholder="How was the tent quality, mandap design, and team behavior?"
-                      className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 focus:outline-none focus:border-gold text-neutral-800"
+                      className="w-full px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-neutral-800"
                     />
                   </div>
 
@@ -164,8 +164,8 @@ export default function ReviewsPage() {
                     <CheckCircle className="h-7 w-7" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-neutral-900">Review Submitted!</h3>
-                    <p className="text-xs text-neutral-500 mt-1 leading-relaxed">
+                    <h3 className="font-semibold text-neutral-900 dark:text-white">Review Submitted!</h3>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">
                       Thank you! Your feedback has been recorded and will show on the website as soon as it is approved by the admin.
                     </p>
                   </div>
@@ -175,27 +175,27 @@ export default function ReviewsPage() {
           </div>
 
           {/* Reviews List (Left 2 Columns) */}
-          <div className="lg:col-span-2 space-y-6">
-            <h2 className="font-serif text-xl font-bold text-neutral-900 flex items-center">
-              <MessageSquare className="h-5 w-5 mr-2 text-primary" /> Approved Customer Testimonials
+          <div className="lg:col-span-2 space-y-6 order-1 lg:order-1">
+            <h2 className="font-serif text-xl font-bold text-neutral-900 dark:text-white flex items-center">
+              <MessageSquare className="h-5 w-5 mr-2 text-primary dark:text-gold" /> Approved Customer Testimonials
             </h2>
 
             <div className="space-y-6">
               {reviews.map((rev) => (
                 <div
                   key={rev.id}
-                  className="bg-white rounded-2xl p-6 border border-gold/15 shadow-sm space-y-3.5"
+                  className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-gold/15 dark:border-gold/30 shadow-sm space-y-3.5"
                 >
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-3">
-                      <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-serif font-bold text-sm">
+                      <div className="w-9 h-9 rounded-full bg-primary/10 dark:bg-gold/10 text-primary dark:text-gold flex items-center justify-center font-serif font-bold text-sm">
                         {rev.customerName.charAt(0)}
                       </div>
                       <div>
-                        <h4 className="font-serif font-bold text-sm text-neutral-900">
+                        <h4 className="font-serif font-bold text-sm text-neutral-900 dark:text-neutral-100">
                           {rev.customerName}
                         </h4>
-                        <span className="text-[10px] text-neutral-500">{rev.createdAt}</span>
+                        <span className="text-[10px] text-neutral-500 dark:text-neutral-400">{rev.createdAt}</span>
                       </div>
                     </div>
 
@@ -204,14 +204,14 @@ export default function ReviewsPage() {
                         <Star
                           key={i}
                           className={`h-3.5 w-3.5 ${
-                            i < rev.rating ? "fill-gold text-gold" : "text-neutral-200"
+                            i < rev.rating ? "fill-gold text-gold" : "text-neutral-200 dark:text-neutral-800"
                           }`}
                         />
                       ))}
                     </div>
                   </div>
 
-                  <p className="text-neutral-700 italic font-sans text-xs sm:text-sm leading-relaxed pl-12 border-l-2 border-gold/20">
+                  <p className="text-neutral-700 dark:text-neutral-300 italic font-sans text-xs sm:text-sm leading-relaxed pl-12 border-l-2 border-gold/20 dark:border-gold/40">
                     &quot;{rev.comment}&quot;
                   </p>
                 </div>

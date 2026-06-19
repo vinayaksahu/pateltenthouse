@@ -48,18 +48,18 @@ export default function ServicesPage() {
   }, []);
 
   return (
-    <div className="bg-cream min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-cream dark:bg-neutral-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-primary font-bold text-xs uppercase tracking-wider block">
+          <span className="text-primary dark:text-gold font-bold text-xs uppercase tracking-wider block">
             Our Offerings
           </span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900">
+          <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-neutral-900 dark:text-white">
             Professional Event & Decor Services
           </h1>
           <div className="w-24 h-1 bg-gold mx-auto" />
-          <p className="text-sm sm:text-base text-neutral-500 font-sans">
+          <p className="text-sm sm:text-base text-neutral-500 dark:text-neutral-400 font-sans">
             We provide everything needed to elevate your celebrations, from grandiose structural tenting to micro-details like banquets, coolers, and customized balloon backdrops.
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function ServicesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gold/15 hover:border-gold transition-all flex flex-col justify-between group"
+                className="bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gold/15 dark:border-gold/30 hover:border-gold dark:hover:border-gold transition-all flex flex-col justify-between group"
               >
                 <div>
                   {/* Service Image */}
@@ -85,20 +85,20 @@ export default function ServicesPage() {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/60 dark:from-neutral-950/80 to-transparent" />
                     
                     {/* Floating Icon */}
-                    <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md p-2.5 rounded-full text-primary gold-border shadow-md">
+                    <div className="absolute bottom-4 left-4 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md p-2.5 rounded-full text-primary dark:text-gold gold-border shadow-md">
                       <IconComponent className="h-5 w-5" />
                     </div>
                   </div>
 
                   {/* Text Content */}
                   <div className="p-6 space-y-2">
-                    <h3 className="font-serif text-xl font-bold text-neutral-900">
+                    <h3 className="font-serif text-xl font-bold text-neutral-900 dark:text-white">
                       {svc.name}
                     </h3>
-                    <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-sans">
+                    <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
                       {svc.description}
                     </p>
                   </div>
@@ -112,7 +112,7 @@ export default function ServicesPage() {
                     )}%20services.`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-2.5 rounded-xl border border-primary text-primary font-bold text-xs text-center flex items-center justify-center space-x-2 hover:bg-primary hover:text-white transition-all uppercase tracking-wide"
+                    className="w-full py-2.5 rounded-xl border border-primary dark:border-gold text-primary dark:text-gold font-bold text-xs text-center flex items-center justify-center space-x-2 hover:bg-primary dark:hover:bg-gold hover:text-white dark:hover:text-neutral-900 transition-all uppercase tracking-wide"
                   >
                     <MessageSquare className="h-4 w-4" />
                     <span>Inquire via WhatsApp</span>

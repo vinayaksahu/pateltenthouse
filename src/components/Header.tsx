@@ -8,8 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "next-themes";
 import { useLanguage } from "@/context/LanguageContext";
-
-
+import { getSettings, formatWhatsAppNumber } from "@/lib/db";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +17,14 @@ export default function Header() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    getSettings().then(setSettings);
+  }, []);
+
+  const primaryPhone = settings?.contactNumbers?.[0] || "9713661625";
+  const whatsappPhone = formatWhatsAppNumber(primaryPhone);
 
   const NAV_LINKS = [
     { name: t("nav_home"), href: "/" },
@@ -125,7 +132,7 @@ export default function Header() {
               )}
               <ThemeToggle />
               <a
-                href="tel:9713661625"
+                href={`tel:${primaryPhone}`}
                 className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-primary/20 dark:border-gold/30 text-primary dark:text-gold text-xs font-semibold hover:bg-primary/5 dark:hover:bg-gold/10 transition-all"
               >
                 <Phone className="h-3.5 w-3.5" />
@@ -223,14 +230,14 @@ export default function Header() {
 
               <div className="mt-auto border-t pt-6 border-gold/20 space-y-3">
                 <a
-                  href="tel:9713661625"
+                  href={`tel:${primaryPhone}`}
                   className="w-full flex items-center justify-center space-x-2 py-2.5 rounded-lg border border-primary/20 dark:border-gold/30 text-primary dark:text-gold font-semibold text-sm hover:bg-primary/5 dark:hover:bg-gold/10 transition-all"
                 >
                   <Phone className="h-4 w-4" />
-                  <span>{t("call")}: 9713661625</span>
+                  <span>{t("call")}: {primaryPhone}</span>
                 </a>
                 <a
-                  href="https://wa.me/919713661625"
+                  href={`https://wa.me/${whatsappPhone}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center space-x-2 py-2.5 rounded-lg royal-red-gradient text-white font-semibold text-sm hover:shadow-lg transition-all gold-border"

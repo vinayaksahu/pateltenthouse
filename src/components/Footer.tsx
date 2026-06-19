@@ -1,12 +1,21 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Tent, Phone, Mail, MapPin, Heart, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { getSettings } from "@/lib/db";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { t } = useLanguage();
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    getSettings().then(setSettings);
+  }, []);
+
+  const contactNumbers = settings?.contactNumbers || ["9713661625", "7000297079"];
 
   return (
     <footer className="bg-neutral-950 text-neutral-300 pt-16 pb-8 gold-border-t">
@@ -84,12 +93,14 @@ export default function Footer() {
               <li className="flex items-center">
                 <Phone className="h-4 w-4 text-gold mr-2.5 shrink-0" />
                 <div className="flex flex-col">
-                  <a href="tel:9713661625" className="hover:text-gold text-neutral-300">
-                    9713661625 (Naresh)
-                  </a>
-                  <a href="tel:7000297079" className="hover:text-gold text-neutral-300">
-                    7000297079 (Kamlesh)
-                  </a>
+                  {contactNumbers.map((phone: string, idx: number) => {
+                    const nameLabel = idx === 0 ? " (Naresh)" : idx === 1 ? " (Kamlesh)" : "";
+                    return (
+                      <a key={idx} href={`tel:${phone}`} className="hover:text-gold text-neutral-300">
+                        {phone}{nameLabel}
+                      </a>
+                    );
+                  })}
                 </div>
               </li>
               <li className="flex items-center">

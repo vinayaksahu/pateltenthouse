@@ -1,8 +1,10 @@
 "use client";
 
 import { MapPin, Phone, MessageSquare, Clock, Map, Send, Mail } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { getSettings, formatWhatsAppNumber } from "@/lib/db";
+import { BusinessSettings } from "@/types";
 
 export default function ContactPage() {
   const [inquiry, setInquiry] = useState({
@@ -13,6 +15,15 @@ export default function ContactPage() {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [settings, setSettings] = useState<BusinessSettings | null>(null);
+
+  useEffect(() => {
+    getSettings().then(setSettings);
+  }, []);
+
+  const contactNumbers = settings?.contactNumbers || ["9713661625", "7000297079"];
+  const primaryPhone = contactNumbers[0];
+  const whatsappPhone = formatWhatsAppNumber(primaryPhone);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +38,7 @@ export default function ContactPage() {
       // Create WhatsApp link for message
       const text = `Hello Patel Tent House,\n\nI have a contact query.\n\n*Name:* ${inquiry.name}\n*Phone:* ${inquiry.phone}\n*Subject:* ${inquiry.subject}\n*Message:* ${inquiry.message}`;
       const encoded = encodeURIComponent(text);
-      window.open(`https://wa.me/919713661625?text=${encoded}`, "_blank");
+      window.open(`https://wa.me/${whatsappPhone}?text=${encoded}`, "_blank");
       
       setSuccess(true);
       setLoading(false);
@@ -86,12 +97,14 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-bold text-neutral-800 dark:text-neutral-200">Call / Contacts</h3>
                     <div className="flex flex-col mt-1 text-neutral-500 dark:text-neutral-400 space-y-1">
-                      <a href="tel:9713661625" className="hover:text-primary dark:hover:text-gold transition-colors">
-                        Naresh Kumar Patel: <strong>9713661625</strong>
-                      </a>
-                      <a href="tel:7000297079" className="hover:text-primary dark:hover:text-gold transition-colors">
-                        Kamlesh Kumar Patel: <strong>7000297079</strong>
-                      </a>
+                      {contactNumbers.map((phone: string, idx: number) => {
+                        const name = idx === 0 ? "Naresh Kumar Patel" : idx === 1 ? "Kamlesh Kumar Patel" : `Contact ${idx + 1}`;
+                        return (
+                          <a key={idx} href={`tel:${phone}`} className="hover:text-primary dark:hover:text-gold transition-colors">
+                            {name}: <strong>{phone}</strong>
+                          </a>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -131,20 +144,20 @@ export default function ContactPage() {
               {/* Direct Buttons */}
               <div className="space-y-3 pt-4 border-t border-neutral-100 dark:border-neutral-800">
                 <a
-                  href="tel:9713661625"
+                  href={`tel:${primaryPhone}`}
                   className="w-full py-2.5 rounded-xl border border-primary dark:border-gold text-primary dark:text-gold font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 hover:bg-primary dark:hover:bg-gold hover:text-white dark:hover:text-neutral-900 transition-all cursor-pointer"
                 >
                   <Phone className="h-4 w-4" />
-                  <span>Call Naresh</span>
+                  <span>Call Primary</span>
                 </a>
                 <a
-                  href="https://wa.me/917000297079"
+                  href={`https://wa.me/${whatsappPhone}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 shadow-sm transition-transform hover:scale-[1.01] cursor-pointer"
                 >
                   <MessageSquare className="h-4 w-4 fill-white" />
-                  <span>WhatsApp Kamlesh</span>
+                  <span>WhatsApp Primary</span>
                 </a>
                 <a
                   href="https://maps.google.com/?q=Jayramnagar+Bilaspur+Chhattisgarh"
@@ -194,7 +207,7 @@ export default function ContactPage() {
                         required
                         value={inquiry.phone}
                         onChange={(e) => setInquiry({ ...inquiry, phone: e.target.value })}
-                        placeholder="9713661625"
+                        placeholder={primaryPhone}
                         className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-neutral-800"
                       />
                     </div>

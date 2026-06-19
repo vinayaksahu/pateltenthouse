@@ -2,8 +2,8 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { getAvailability, createBooking } from "@/lib/db";
-import { AvailabilityBlock } from "@/types";
+import { getAvailability, createBooking, getSettings, formatWhatsAppNumber } from "@/lib/db";
+import { AvailabilityBlock, BusinessSettings } from "@/types";
 import {
   Calendar as CalendarIcon,
   User,
@@ -29,6 +29,7 @@ function BookingFormContent() {
 
   const [availability, setAvailability] = useState<AvailabilityBlock[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [settings, setSettings] = useState<BusinessSettings | null>(null);
 
   // Form State
   const [form, setForm] = useState({
@@ -53,9 +54,15 @@ function BookingFormContent() {
     async function load() {
       const data = await getAvailability();
       setAvailability(data);
+      const settingsData = await getSettings();
+      setSettings(settingsData);
     }
     load();
   }, []);
+
+  const primaryPhone = settings?.contactNumbers?.[0] || "9713661625";
+  const whatsappPhone = formatWhatsAppNumber(primaryPhone);
+  const gstRate = settings?.gstRate ?? 18;
 
   // Update selected package if URL change
   useEffect(() => {
@@ -114,7 +121,7 @@ function BookingFormContent() {
     else if (form.packageType === "premium") subtotal = 25000;
     else if (form.packageType === "custom") subtotal = 5000; // base deposit for custom
 
-    const gst = Math.round(subtotal * 0.18);
+    const gst = Math.round(subtotal * (gstRate / 100));
     const grandTotal = subtotal + gst;
 
     try {
@@ -212,7 +219,7 @@ function BookingFormContent() {
                         required
                         value={form.mobileNumber}
                         onChange={(e) => setForm({ ...form, mobileNumber: e.target.value })}
-                        placeholder="9713661625"
+                        placeholder={primaryPhone}
                         className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold text-sm text-neutral-800"
                       />
                     </div>
@@ -510,7 +517,7 @@ function BookingFormContent() {
                 <button
                   onClick={() => {
                     const message = `Hello Patel Tent House,\n\nI just submitted a booking request via the website.\n\n*Reference ID:* ${createdId}\n*Name:* ${form.customerName}\n*Event:* ${form.eventType}\n*Date:* ${form.eventDate}\n\nPlease check my request and confirm.`;
-                    window.open(`https://wa.me/919713661625?text=${encodeURIComponent(message)}`, "_blank");
+                    window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`, "_blank");
                   }}
                   className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-transform hover:scale-105"
                 >

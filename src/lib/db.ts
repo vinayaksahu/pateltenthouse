@@ -612,3 +612,30 @@ export async function unblockDate(date: string): Promise<void> {
   const filtered = calendar.filter((c) => c.date !== date);
   setLocal("pth_availability", filtered);
 }
+
+// --- ADMINISTRATIVE REVIEW SAVE ---
+export async function saveReview(review: Review): Promise<void> {
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, "reviews", review.id), review);
+      return;
+    } catch (e) {
+      console.error("Firestore saveReview failed.", e);
+    }
+  }
+
+  const reviews = getLocal("pth_reviews", DEFAULT_REVIEWS);
+  const idx = reviews.findIndex((r) => r.id === review.id);
+  if (idx > -1) {
+    reviews[idx] = review;
+  } else {
+    reviews.push(review);
+  }
+  setLocal("pth_reviews", reviews);
+}
+
+// --- WHATSAPP NUMBER FORMATTER ---
+export function formatWhatsAppNumber(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  return digits.length === 10 ? "91" + digits : digits;
+}

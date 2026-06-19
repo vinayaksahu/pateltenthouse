@@ -19,8 +19,8 @@ import {
   Heart
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { getPackages, getReviews, getServices } from "@/lib/db";
-import { Package, Review, ServiceItem } from "@/types";
+import { getPackages, getReviews, getServices, getSettings, formatWhatsAppNumber } from "@/lib/db";
+import { Package, Review, ServiceItem, BusinessSettings } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function HomePage() {
@@ -28,18 +28,24 @@ export default function HomePage() {
   const [packages, setPackages] = useState<Package[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
+  const [settings, setSettings] = useState<BusinessSettings | null>(null);
 
   useEffect(() => {
     async function loadData() {
       const pkgs = await getPackages();
       const revs = await getReviews(true); // only approved
       const svcs = await getServices();
+      const settingsData = await getSettings();
       setPackages(pkgs.filter((p) => p.isActive));
       setReviews(revs.slice(0, 3)); // show top 3
       setServices(svcs.slice(0, 6)); // show first 6 services
+      setSettings(settingsData);
     }
     loadData();
   }, []);
+
+  const primaryPhone = settings?.contactNumbers?.[0] || "9713661625";
+  const whatsappPhone = formatWhatsAppNumber(primaryPhone);
 
   const heroBg = "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1920&q=80";
 
@@ -124,7 +130,7 @@ export default function HomePage() {
               {t("get_quote")}
             </Link>
             <a
-              href="https://wa.me/919713661625"
+              href={`https://wa.me/${whatsappPhone}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#25D366] text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-xl hover:bg-[#20ba59] transition-all hover:scale-105"
@@ -275,7 +281,7 @@ export default function HomePage() {
                   </div>
 
                   <a
-                    href={`https://wa.me/919713661625?text=Hello%20Patel%20Tent%20House,%20I%20want%20to%20inquire%20about%20${encodeURIComponent(
+                    href={`https://wa.me/${whatsappPhone}?text=Hello%20Patel%20Tent%20House,%20I%20want%20to%20inquire%20about%20${encodeURIComponent(
                       svc.name
                     )}`}
                     target="_blank"
@@ -456,20 +462,20 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <a
-              href="tel:9713661625"
+              href={`tel:${primaryPhone}`}
               className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white hover:bg-neutral-100 text-primary font-bold text-sm flex items-center justify-center space-x-2 shadow-lg transition-transform hover:scale-105"
             >
               <Phone className="h-4 w-4" />
-              <span>{t("call")}: 9713661625</span>
+              <span>{t("call")}: {primaryPhone}</span>
             </a>
             <a
-              href="https://wa.me/917000297079"
+              href={`https://wa.me/${whatsappPhone}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-lg transition-transform hover:scale-105"
             >
               <MessageSquare className="h-4 w-4 fill-white" />
-              <span>{t("whatsapp")}: 7000297079</span>
+              <span>{t("whatsapp")}: {primaryPhone}</span>
             </a>
           </div>
         </div>

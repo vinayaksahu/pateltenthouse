@@ -1,11 +1,21 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Phone, MessageCircle, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
+import { getSettings, formatWhatsAppNumber } from "@/lib/db";
 
 export default function FloatingCTA() {
-  const whatsappUrl = "https://wa.me/919713661625?text=Hello%20Patel%20Tent%20House,%20I%20want%20to%20inquire%20about%20event%20booking%20and%20decorations.";
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    getSettings().then(setSettings);
+  }, []);
+
+  const primaryPhone = settings?.contactNumbers?.[0] || "9713661625";
+  const whatsappPhone = formatWhatsAppNumber(primaryPhone);
+  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=Hello%20Patel%20Tent%20House,%20I%20want%20to%20inquire%20about%20event%20booking%20and%20decorations.`;
 
   return (
     <>
@@ -13,7 +23,7 @@ export default function FloatingCTA() {
       <div className="fixed bottom-20 right-6 z-40 hidden sm:flex flex-col space-y-3">
         {/* Call Button */}
         <motion.a
-          href="tel:9713661625"
+          href={`tel:${primaryPhone}`}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           className="w-12 h-12 rounded-full bg-primary hover:bg-primary-hover flex items-center justify-center text-white shadow-xl gold-border cursor-pointer"
@@ -39,7 +49,7 @@ export default function FloatingCTA() {
       {/* Mobile Sticky Bottom Bar (Visible only on mobile screen < 640px) */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-neutral-900 border-t border-gold/30 shadow-2xl px-4 py-2 flex items-center justify-between">
         <a
-          href="tel:9713661625"
+          href={`tel:${primaryPhone}`}
           className="flex flex-col items-center justify-center text-neutral-300 active:text-gold flex-1 py-1"
         >
           <Phone className="h-5 w-5 text-gold" />

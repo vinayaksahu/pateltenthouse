@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getSettings, createBooking } from "@/lib/db";
+import { getSettings, createBooking, formatWhatsAppNumber } from "@/lib/db";
 import { RentalItem, BusinessSettings } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
 import {
@@ -153,9 +153,12 @@ export default function CustomPackageBuilder() {
     }));
 
   const subtotal = selectedItemsList.reduce((acc, curr) => acc + curr.total, 0);
-  const gstRate = settings?.gstRate || 18;
-  const gst = includeGST ? Math.round((subtotal * gstRate) / 100) : 0;
+  const gstRate = settings?.gstRate ?? 18;
+  const gst = includeGST && gstRate > 0 ? Math.round((subtotal * gstRate) / 100) : 0;
   const grandTotal = subtotal + gst;
+  const primaryPhone = settings?.contactNumbers?.[0] || "9713661625";
+  const whatsappPhone = formatWhatsAppNumber(primaryPhone);
+  const contactPhonesStr = settings?.contactNumbers?.join(", ") || "9713661625, 7000297079";
 
   // Smart Recommendations
   const chairCount = selectedQuantities["chairs"] || 0;
@@ -287,7 +290,7 @@ Event Address: ${eventAddress || "Not Selected"}`;
     }*Grand Total: ₹${grandTotal.toLocaleString("en-IN")}*\n\nPlease confirm availability for booking.`;
 
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/919713661625?text=${encoded}`, "_blank");
+    window.open(`https://wa.me/${whatsappPhone}?text=${encoded}`, "_blank");
   };
 
   // PDF Quotation Generator
@@ -306,7 +309,7 @@ Event Address: ${eventAddress || "Not Selected"}`;
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.text("आपके हर शुभ अवसर को बनाएं खास", 14, 25);
-    doc.text("Jayramnagar, Bilaspur, CG | Ph: 9713661625, 7000297079", 14, 31);
+    doc.text(`Jayramnagar, Bilaspur, CG | Ph: ${contactPhonesStr}`, 14, 31);
 
     // Document Title
     doc.setTextColor(154, 13, 13);
@@ -571,17 +574,19 @@ Event Address: ${eventAddress || "Not Selected"}`;
 
               <div className="border-t border-neutral-100 dark:border-neutral-800 pt-4 space-y-3">
                 {/* GST Toggle */}
-                <div className="flex items-center justify-between text-xs pb-1">
-                  <span className="text-neutral-500 font-medium flex items-center">
-                    Include Estimate GST ({gstRate}%)
-                  </span>
-                  <input
-                    type="checkbox"
-                    checked={includeGST}
-                    onChange={(e) => setIncludeGST(e.target.checked)}
-                    className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2 accent-primary cursor-pointer"
-                  />
-                </div>
+                {gstRate > 0 && (
+                  <div className="flex items-center justify-between text-xs pb-1">
+                    <span className="text-neutral-500 font-medium flex items-center">
+                      Include Estimate GST ({gstRate}%)
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={includeGST}
+                      onChange={(e) => setIncludeGST(e.target.checked)}
+                      className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2 accent-primary cursor-pointer"
+                    />
+                  </div>
+                )}
 
                 <div className="flex justify-between text-xs">
                   <span className="text-neutral-500 dark:text-neutral-400">Subtotal</span>

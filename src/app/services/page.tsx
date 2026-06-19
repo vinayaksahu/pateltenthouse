@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getServices } from "@/lib/db";
-import { ServiceItem } from "@/types";
+import { getServices, getSettings, formatWhatsAppNumber } from "@/lib/db";
+import { ServiceItem, BusinessSettings } from "@/types";
 import {
   Tent,
   Heart,
@@ -38,14 +38,20 @@ const iconMap: { [key: string]: any } = {
 
 export default function ServicesPage() {
   const [services, setServices] = useState<ServiceItem[]>([]);
+  const [settings, setSettings] = useState<BusinessSettings | null>(null);
 
   useEffect(() => {
     async function load() {
       const data = await getServices();
       setServices(data);
+      const settingsData = await getSettings();
+      setSettings(settingsData);
     }
     load();
   }, []);
+
+  const primaryPhone = settings?.contactNumbers?.[0] || "9713661625";
+  const whatsappPhone = formatWhatsAppNumber(primaryPhone);
 
   return (
     <div className="bg-cream dark:bg-neutral-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
@@ -107,7 +113,7 @@ export default function ServicesPage() {
                 {/* Bottom Inquiry button */}
                 <div className="p-6 pt-0">
                   <a
-                    href={`https://wa.me/919713661625?text=Hello%20Patel%20Tent%20House,%20I%20want%20to%20inquire%20about%20${encodeURIComponent(
+                    href={`https://wa.me/${whatsappPhone}?text=Hello%20Patel%20Tent%20House,%20I%20want%20to%20inquire%20about%20${encodeURIComponent(
                       svc.name
                     )}%20services.`}
                     target="_blank"

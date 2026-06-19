@@ -110,6 +110,19 @@ export default function Header() {
 
             {/* Right Action Buttons */}
             <div className="hidden sm:flex items-center space-x-3">
+              {mounted && (
+                <button
+                  onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+                  className="p-2 rounded-full border border-gold/30 hover:border-gold text-gold transition-colors hover:bg-primary/5 cursor-pointer flex items-center justify-center relative"
+                  title={language === "en" ? "Switch to Hindi" : "Switch to English"}
+                  aria-label="Toggle language"
+                >
+                  <Globe className="h-4.5 w-4.5" />
+                  <span className="absolute -bottom-1 -right-1 bg-primary dark:bg-neutral-900 text-gold border border-gold/30 text-[8px] font-extrabold px-1 rounded scale-90">
+                    {language === "en" ? "EN" : "HI"}
+                  </span>
+                </button>
+              )}
               <ThemeToggle />
               <a
                 href="tel:9713661625"
@@ -128,6 +141,19 @@ export default function Header() {
 
             {/* Mobile Menu Toggle */}
             <div className="flex items-center space-x-2 lg:hidden">
+              {mounted && (
+                <button
+                  onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+                  className="p-2 rounded-full border border-gold/30 hover:border-gold text-gold transition-colors hover:bg-primary/5 cursor-pointer flex items-center justify-center relative"
+                  title={language === "en" ? "Switch to Hindi" : "Switch to English"}
+                  aria-label="Toggle language"
+                >
+                  <Globe className="h-4.5 w-4.5" />
+                  <span className="absolute -bottom-1 -right-1 bg-primary dark:bg-neutral-900 text-gold border border-gold/30 text-[8px] font-extrabold px-1 rounded scale-90">
+                    {language === "en" ? "EN" : "HI"}
+                  </span>
+                </button>
+              )}
               <ThemeToggle />
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -196,15 +222,6 @@ export default function Header() {
               </nav>
 
               <div className="mt-auto border-t pt-6 border-gold/20 space-y-3">
-                {mounted && (
-                  <button
-                    onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                    className="w-full flex items-center justify-center space-x-2 py-2.5 rounded-lg border border-primary/20 dark:border-gold/30 text-primary dark:text-gold font-semibold text-sm hover:bg-primary/5 dark:hover:bg-gold/10 transition-all"
-                  >
-                    <Globe className="h-4 w-4" />
-                    <span>Language: {language === "en" ? "English" : "हिंदी"}</span>
-                  </button>
-                )}
                 <a
                   href="tel:9713661625"
                   className="w-full flex items-center justify-center space-x-2 py-2.5 rounded-lg border border-primary/20 dark:border-gold/30 text-primary dark:text-gold font-semibold text-sm hover:bg-primary/5 dark:hover:bg-gold/10 transition-all"

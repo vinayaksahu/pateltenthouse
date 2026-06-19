@@ -275,7 +275,14 @@ export default function CustomPackageBuilder() {
       .map((si) => `• ${si.item.name} (${si.quantity} x ₹${si.item.pricePerUnit})`)
       .join("\n");
 
-    const message = `Hello Patel Tent House,\n\nI want to request a custom package quotation.\n\n*Customer Details:*\nName: ${clientName}\nPhone: ${clientPhone || "N/A"}\n\n*Selected Items:*\n${itemsText}\n\n*Estimated Cost:*\nSubtotal: ₹${subtotal.toLocaleString("en-IN")}\n${
+    const eventDetailsText = `*Event Setup Info:*
+Event Date: ${eventDate || "Not Selected"}
+Event Type: ${eventType || "Not Selected"}
+Event Time: ${eventTime || "Not Selected"}
+Expected Guests: ${expectedGuests || "Not Selected"}
+Event Address: ${eventAddress || "Not Selected"}`;
+
+    const message = `Hello Patel Tent House,\n\nI want to request a custom package quotation.\n\n*Customer Details:*\nName: ${clientName}\nPhone: ${clientPhone || "N/A"}\n\n${eventDetailsText}\n\n*Selected Items:*\n${itemsText}\n\n*Estimated Cost:*\nSubtotal: ₹${subtotal.toLocaleString("en-IN")}\n${
       includeGST ? `GST (${gstRate}%): ₹${gst.toLocaleString("en-IN")}\n` : ""
     }*Grand Total: ₹${grandTotal.toLocaleString("en-IN")}*\n\nPlease confirm availability for booking.`;
 
@@ -292,19 +299,19 @@ export default function CustomPackageBuilder() {
     doc.rect(0, 0, 210, 38, "F");
 
     doc.setTextColor(255, 255, 255);
-    doc.setFont("serif", "bold");
+    doc.setFont("times", "bold");
     doc.setFontSize(22);
     doc.text("PATEL TENT HOUSE", 14, 18);
 
     doc.setFontSize(10);
-    doc.setFont("sans-serif", "normal");
+    doc.setFont("helvetica", "normal");
     doc.text("आपके हर शुभ अवसर को बनाएं खास", 14, 25);
     doc.text("Jayramnagar, Bilaspur, CG | Ph: 9713661625, 7000297079", 14, 31);
 
     // Document Title
     doc.setTextColor(154, 13, 13);
     doc.setFontSize(14);
-    doc.setFont("serif", "bold");
+    doc.setFont("times", "bold");
     doc.text("ESTIMATED QUOTATION", 14, 48);
 
     // Date
@@ -313,16 +320,22 @@ export default function CustomPackageBuilder() {
     doc.setTextColor(80, 80, 80);
     doc.text(`Date: ${today}`, 155, 48);
 
-    // Client details
+    // Client & Event details
     doc.setDrawColor(212, 175, 55); // Gold
     doc.setLineWidth(0.5);
     doc.line(14, 52, 196, 52);
 
-    doc.setFont("sans-serif", "bold");
+    doc.setFont("helvetica", "bold");
     doc.text("Customer Details:", 14, 60);
-    doc.setFont("sans-serif", "normal");
+    doc.setFont("helvetica", "normal");
     doc.text(`Name: ${clientName || "Valued Client"}`, 14, 66);
     doc.text(`Contact Phone: ${clientPhone || "N/A"}`, 14, 72);
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Event Setup Info:", 100, 60);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Date: ${eventDate || "N/A"} | Type: ${eventType || "N/A"}`, 100, 66);
+    doc.text(`Guests: ${expectedGuests || "N/A"} | Address: ${eventAddress || "N/A"}`, 100, 72);
 
     // Table Data
     const tableBody = selectedItemsList.map((si, i) => [
@@ -342,10 +355,10 @@ export default function CustomPackageBuilder() {
       styles: { fontSize: 9 }
     });
 
-    const finalY = doc.previousAutoTable.finalY + 10;
+    const finalY = (doc.lastAutoTable?.finalY || doc.previousAutoTable?.finalY || 78) + 10;
 
     // Totals
-    doc.setFont("sans-serif", "bold");
+    doc.setFont("helvetica", "bold");
     doc.text(`Subtotal: Rs. ${subtotal.toLocaleString("en-IN")}`, 140, finalY);
     if (includeGST) {
       doc.text(`GST (${gstRate}%): Rs. ${gst.toLocaleString("en-IN")}`, 140, finalY + 6);
@@ -355,7 +368,7 @@ export default function CustomPackageBuilder() {
     }
 
     // Footer note
-    doc.setFont("serif", "italic");
+    doc.setFont("times", "italic");
     doc.setFontSize(9);
     doc.setTextColor(120, 120, 120);
     doc.text("Note: This is an estimated price. Rates may vary depending on actual location distance and site challenges.", 14, finalY + 25);
@@ -415,7 +428,7 @@ export default function CustomPackageBuilder() {
 
               {budgetSuggestion && (
                 <div className="bg-neutral-900 rounded-xl p-4 border border-neutral-800 space-y-2">
-                  <h3 className="text-xs font-bold text-gold uppercase tracking-wider">AI Suggested Items Combination:</h3>
+                  <h3 className="text-xs font-bold text-gold uppercase tracking-wider">Suggested Items Combination:</h3>
                   <div className="grid grid-cols-2 gap-2 text-xs text-neutral-400">
                     {budgetSuggestion.items.map((bs, i) => (
                       <span key={i}>

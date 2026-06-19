@@ -14,7 +14,10 @@ import {
   unblockDate,
   approveReview,
   deleteReview,
-  saveSettings
+  saveSettings,
+  getGalleryItems,
+  addGalleryItem,
+  deleteGalleryItem
 } from "@/lib/db";
 import {
   Booking,
@@ -22,7 +25,8 @@ import {
   Review,
   AvailabilityBlock,
   BusinessSettings,
-  RentalItem
+  RentalItem,
+  GalleryItem
 } from "@/types";
 import {
   BarChart,
@@ -43,10 +47,146 @@ import {
   Edit,
   DollarSign,
   AlertTriangle,
-  Lock
+  Lock,
+  Heart,
+  Bell,
+  Image as ImageIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
+
+// Auspicious Hindu Marriage Dates (Vivah Muhurats) for 2026/2027
+const MUHURAT_DATES = [
+  // 2026
+  { date: "2026-02-05", label: "Magha Shukla Tritiya" },
+  { date: "2026-02-06", label: "Magha Shukla Chaturthi" },
+  { date: "2026-02-08", label: "Magha Shukla Shashthi" },
+  { date: "2026-02-10", label: "Magha Shukla Ashtami" },
+  { date: "2026-02-12", label: "Magha Shukla Dashami" },
+  { date: "2026-02-14", label: "Magha Krishna Dwadashi" },
+  { date: "2026-02-19", label: "Phalguna Shukla Dwitiya" },
+  { date: "2026-02-20", label: "Phalguna Shukla Tritiya" },
+  { date: "2026-02-21", label: "Phalguna Shukla Chaturthi" },
+  { date: "2026-02-24", label: "Phalguna Shukla Saptami" },
+  { date: "2026-02-25", label: "Phalguna Shukla Ashtami" },
+  { date: "2026-02-26", label: "Phalguna Shukla Navami" },
+  { date: "2026-03-02", label: "Phalguna Shukla Dwadashi" },
+  { date: "2026-03-03", label: "Phalguna Shukla Trayodashi" },
+  { date: "2026-03-04", label: "Phalguna Shukla Chaturdashi" },
+  { date: "2026-03-07", label: "Phalguna Krishna Tritiya" },
+  { date: "2026-03-08", label: "Phalguna Krishna Chaturthi" },
+  { date: "2026-03-09", label: "Phalguna Krishna Panchami" },
+  { date: "2026-03-11", label: "Phalguna Krishna Saptami" },
+  { date: "2026-03-12", label: "Phalguna Krishna Ashtami" },
+  { date: "2026-04-15", label: "Chaitra Krishna Dwadashi" },
+  { date: "2026-04-20", label: "Vaishakha Shukla Tritiya (Akshaya Tritiya)" },
+  { date: "2026-04-21", label: "Vaishakha Shukla Chaturthi" },
+  { date: "2026-04-25", label: "Vaishakha Shukla Ashtami" },
+  { date: "2026-04-26", label: "Vaishakha Shukla Navami" },
+  { date: "2026-04-27", label: "Vaishakha Shukla Dashami" },
+  { date: "2026-04-28", label: "Vaishakha Shukla Ekadashi" },
+  { date: "2026-04-29", label: "Vaishakha Shukla Dwadashi" },
+  { date: "2026-05-01", label: "Vaishakha Shukla Chaturdashi" },
+  { date: "2026-05-03", label: "Vaishakha Krishna Dwitiya" },
+  { date: "2026-05-05", label: "Vaishakha Krishna Chaturthi" },
+  { date: "2026-05-06", label: "Vaishakha Krishna Panchami" },
+  { date: "2026-05-07", label: "Vaishakha Krishna Shashthi" },
+  { date: "2026-05-08", label: "Vaishakha Krishna Saptami" },
+  { date: "2026-05-13", label: "Vaishakha Krishna Dwadashi" },
+  { date: "2026-05-14", label: "Vaishakha Krishna Trayodashi" },
+  { date: "2026-06-21", label: "Ashadha Shukla Shashthi" },
+  { date: "2026-06-22", label: "Ashadha Shukla Saptami" },
+  { date: "2026-06-23", label: "Ashadha Shukla Ashtami" },
+  { date: "2026-06-24", label: "Ashadha Shukla Navami" },
+  { date: "2026-06-25", label: "Ashadha Shukla Dashami" },
+  { date: "2026-06-26", label: "Ashadha Shukla Ekadashi" },
+  { date: "2026-06-27", label: "Ashadha Shukla Dwadashi" },
+  { date: "2026-06-29", label: "Ashadha Shukla Chaturdashi" },
+  { date: "2026-07-01", label: "Ashadha Krishna Dwitiya" },
+  { date: "2026-07-06", label: "Ashadha Krishna Saptami" },
+  { date: "2026-07-07", label: "Ashadha Krishna Ashtami" },
+  { date: "2026-07-11", label: "Ashadha Krishna Dwadashi" },
+  { date: "2026-11-21", label: "Kartika Shukla Ekadashi (Dev Uthani)" },
+  { date: "2026-11-24", label: "Kartika Shukla Chaturdashi" },
+  { date: "2026-11-25", label: "Kartika Purnima" },
+  { date: "2026-11-26", label: "Margashirsha Krishna Pratipada" },
+  { date: "2026-12-02", label: "Margashirsha Krishna Ashtami" },
+  { date: "2026-12-03", label: "Margashirsha Krishna Navami" },
+  { date: "2026-12-04", label: "Margashirsha Krishna Dashami" },
+  { date: "2026-12-05", label: "Margashirsha Krishna Ekadashi" },
+  { date: "2026-12-06", label: "Margashirsha Krishna Dwadashi" },
+  { date: "2026-12-11", label: "Margashirsha Shukla Dwitiya" },
+  { date: "2026-12-12", label: "Margashirsha Shukla Tritiya" },
+
+  // 2027
+  { date: "2027-01-15", label: "Pausha Shukla Ashtami" },
+  { date: "2027-01-18", label: "Pausha Shukla Ekadashi" },
+  { date: "2027-01-19", label: "Pausha Shukla Dwadashi" },
+  { date: "2027-01-20", label: "Pausha Shukla Trayodashi" },
+  { date: "2027-01-24", label: "Pausha Krishna Dwitiya" },
+  { date: "2027-01-26", label: "Pausha Krishna Chaturthi" },
+  { date: "2027-01-27", label: "Pausha Krishna Panchami" },
+  { date: "2027-01-30", label: "Pausha Krishna Ashtami" },
+  { date: "2027-01-31", label: "Pausha Krishna Navami" },
+  { date: "2027-02-02", label: "Pausha Krishna Ekadashi" },
+  { date: "2027-02-03", label: "Pausha Krishna Dwadashi" },
+  { date: "2027-02-09", label: "Magha Shukla Dwitiya" },
+  { date: "2027-02-10", label: "Magha Shukla Tritiya" },
+  { date: "2027-02-11", label: "Magha Shukla Chaturthi" },
+  { date: "2027-02-14", label: "Magha Shukla Saptami" },
+  { date: "2027-02-15", label: "Magha Shukla Ashtami" },
+  { date: "2027-02-21", label: "Magha Krishna Dwitiya" },
+  { date: "2027-02-22", label: "Magha Krishna Tritiya" },
+  { date: "2027-02-25", label: "Magha Krishna ... " },
+  { date: "2027-02-26", label: "Magha Krishna Saptami" },
+  { date: "2027-02-27", label: "Magha Krishna Ashtami" },
+  { date: "2027-02-28", label: "Magha Krishna Navami" },
+  { date: "2027-03-02", label: "Magha Krishna Ekadashi" },
+  { date: "2027-03-03", label: "Magha Krishna Dwadashi" },
+  { date: "2027-03-09", label: "Phalguna Shukla Dwitiya" },
+  { date: "2027-03-10", label: "Phalguna Shukla Tritiya" },
+  { date: "2027-03-11", label: "Phalguna Shukla Chaturthi" },
+  { date: "2027-03-14", label: "Phalguna Shukla Saptami" },
+  { date: "2027-03-15", label: "Phalguna Shukla Ashtami" },
+  { date: "2027-04-18", label: "Chaitra Shukla Ekadashi" },
+  { date: "2027-04-19", label: "Chaitra Shukla Dwadashi" },
+  { date: "2027-04-21", label: "Chaitra Shukla Chaturdashi" },
+  { date: "2027-04-23", label: "Chaitra Krishna Pratipada" },
+  { date: "2027-04-24", label: "Chaitra Krishna Dwitiya" },
+  { date: "2027-04-25", label: "Chaitra Krishna Tritiya" },
+  { date: "2027-04-26", label: "Chaitra Krishna Chaturthi" },
+  { date: "2027-04-27", label: "Chaitra Krishna Panchami" },
+  { date: "2027-04-28", label: "Chaitra Krishna Shashthi" },
+  { date: "2027-05-04", label: "Vaishakha Shukla Dwitiya" },
+  { date: "2027-05-07", label: "Vaishakha Shukla Panchami" },
+  { date: "2027-05-08", label: "Vaishakha Shukla Shashthi" },
+  { date: "2027-05-09", label: "Vaishakha Shukla Saptami" },
+  { date: "2027-05-13", label: "Vaishakha Shukla Ekadashi" },
+  { date: "2027-05-14", label: "Vaishakha Shukla Dwadashi" },
+  { date: "2027-05-15", label: "Vaishakha Shukla Trayodashi" },
+  { date: "2027-05-16", label: "Vaishakha Shukla Chaturdashi" },
+  { date: "2027-05-17", label: "Vaishakha Purnima" },
+  { date: "2027-05-18", label: "Jyeshtha Krishna Pratipada" },
+  { date: "2027-05-19", label: "Jyeshtha Krishna Dwitiya" },
+  { date: "2027-05-20", label: "Jyeshtha Krishna Tritiya" },
+  { date: "2027-05-21", label: "Jyeshtha Krishna Chaturthi" },
+  { date: "2027-05-22", label: "Jyeshtha Krishna Panchami" },
+  { date: "2027-05-23", label: "Jyeshtha Krishna Shashthi" },
+  { date: "2027-05-24", label: "Jyeshtha Krishna Saptami" },
+  { date: "2027-05-25", label: "Jyeshtha Krishna Ashtami" },
+  { date: "2027-05-30", label: "Jyeshtha Krishna Dwadashi" },
+  { date: "2027-05-31", label: "Jyeshtha Krishna Trayodashi" },
+  { date: "2027-06-01", label: "Jyeshtha Krishna Chaturdashi" },
+  { date: "2027-06-05", label: "Jyeshtha Shukla Pratipada" },
+  { date: "2027-06-09", label: "Jyeshtha Shukla Panchami" },
+  { date: "2027-06-10", label: "Jyeshtha Shukla Shashthi" },
+  { date: "2027-06-11", label: "Jyeshtha Shukla Saptami" },
+  { date: "2027-06-12", label: "Jyeshtha Shukla Ashtami" },
+  { date: "2027-06-13", label: "Jyeshtha Shukla Navami" },
+  { date: "2027-06-15", label: "Jyeshtha Shukla Ekadashi" },
+  { date: "2027-06-16", label: "Jyeshtha Shukla Dwadashi" },
+  { date: "2027-06-17", label: "Jyeshtha Shukla Trayodashi" }
+];
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -59,10 +199,23 @@ export default function AdminDashboardPage() {
   const [availability, setAvailability] = useState<AvailabilityBlock[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  
+  // Gallery Management Form State
+  const [newGalleryTitle, setNewGalleryTitle] = useState("");
+  const [newGalleryUrl, setNewGalleryUrl] = useState("");
+  const [newGalleryCategory, setNewGalleryCategory] = useState<"wedding" | "mandap" | "stage" | "lighting" | "decoration" | "birthday">("wedding");
+
+  // Notifications State
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  // Muhurat filters
+  const [muhuratYearFilter, setMuhuratYearFilter] = useState("all");
+  const [muhuratMonthFilter, setMuhuratMonthFilter] = useState("all");
 
   // Editing Forms/Modals States
   const [editingPkg, setEditingPkg] = useState<Package | null>(null);
@@ -92,12 +245,14 @@ export default function AdminDashboardPage() {
       const a = await getAvailability();
       const r = await getReviews(false); // get ALL reviews (unapproved too)
       const s = await getSettings();
+      const g = await getGalleryItems();
       
       setBookings(b);
       setPackages(p);
       setAvailability(a);
       setReviews(r);
       setSettings(s);
+      setGalleryItems(g);
     } catch (e) {
       console.error("Failed to load admin data", e);
     }
@@ -197,6 +352,53 @@ export default function AdminDashboardPage() {
     }
   };
 
+  // Gallery Handlers
+  const handleAddGalleryItem = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newGalleryUrl) return;
+    try {
+      await addGalleryItem({
+        title: newGalleryTitle || "Work Showcase",
+        imageUrl: newGalleryUrl,
+        category: newGalleryCategory
+      });
+      setNewGalleryTitle("");
+      setNewGalleryUrl("");
+      await loadAllData();
+      alert("Gallery image added successfully!");
+    } catch (e) {
+      console.error("Failed to add gallery item", e);
+      alert("Error adding gallery image.");
+    }
+  };
+
+  const handleDeleteGalleryItem = async (id: string) => {
+    if (confirm("Are you sure you want to delete this gallery image?")) {
+      try {
+        await deleteGalleryItem(id);
+        await loadAllData();
+      } catch (e) {
+        console.error("Failed to delete gallery item", e);
+      }
+    }
+  };
+
+  // Muhurat toggle blocking handler
+  const handleToggleMuhuratDate = async (dateStr: string, label: string) => {
+    const existingBlock = availability.find((a) => a.date === dateStr);
+    if (existingBlock) {
+      if (confirm(`Do you want to unblock ${dateStr} (${label})?`)) {
+        await unblockDate(dateStr);
+        await loadAllData();
+      }
+    } else {
+      if (confirm(`Do you want to block ${dateStr} (${label}) as a Muhurat?`)) {
+        await blockDate(dateStr, "blocked", `Vivah Muhurat: ${label}`);
+        await loadAllData();
+      }
+    }
+  };
+
   // Export to CSV
   const exportToCSV = () => {
     const headers = "Booking ID,Customer Name,Phone,Date,Event,Guests,Package,Subtotal,GST,Total,Status\n";
@@ -249,11 +451,11 @@ export default function AdminDashboardPage() {
     .slice(0, 5);
 
   if (!authorized) {
-    return <div className="text-center py-20 bg-cream">Authenticating access...</div>;
+    return <div className="text-center py-20 bg-cream dark:bg-neutral-950 text-neutral-800 dark:text-neutral-200">Authenticating access...</div>;
   }
 
   return (
-    <div className="bg-cream min-h-screen">
+    <div className="bg-cream dark:bg-neutral-950 min-h-screen text-neutral-800 dark:text-neutral-200 transition-colors duration-300">
       {/* Admin Navbar */}
       <div className="bg-neutral-950 text-white py-3 px-6 border-b border-gold/30 flex justify-between items-center">
         <div className="flex items-center space-x-2">
@@ -266,7 +468,88 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 relative">
+          {/* Notifications Bell Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="p-2 rounded-full border border-white/20 text-neutral-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer relative flex items-center justify-center"
+              title="Notifications"
+            >
+              <Bell className="h-4.5 w-4.5" />
+              {bookings.filter(b => b.status === "pending").length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-pulse">
+                  {bookings.filter(b => b.status === "pending").length}
+                </span>
+              )}
+            </button>
+
+            {/* Dropdown Panel */}
+            <AnimatePresence>
+              {showNotifications && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setShowNotifications(false)}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 mt-2 w-80 bg-white dark:bg-neutral-900 border border-gold/20 dark:border-gold/30 rounded-2xl shadow-xl z-50 p-4 text-xs max-h-96 overflow-y-auto text-neutral-800 dark:text-neutral-200"
+                  >
+                    <div className="flex justify-between items-center border-b pb-2 mb-3 dark:border-neutral-800">
+                      <h4 className="font-serif font-bold text-neutral-900 dark:text-neutral-100">
+                        New Booking Notifications
+                      </h4>
+                      <span className="text-[9px] bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded font-bold">
+                        {bookings.filter(b => b.status === "pending").length} Pending
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {bookings.filter(b => b.status === "pending").map((b) => (
+                        <div
+                          key={b.id}
+                          onClick={() => {
+                            setActiveTab("bookings");
+                            setSearchQuery(b.id);
+                            setShowNotifications(false);
+                          }}
+                          className="p-2.5 rounded-xl border border-neutral-100 dark:border-neutral-800 hover:border-gold/30 dark:hover:border-gold/30 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-all cursor-pointer"
+                        >
+                          <div className="flex justify-between items-start">
+                            <span className="font-bold text-neutral-800 dark:text-neutral-150">
+                              {b.customerName}
+                            </span>
+                            <span className="text-[8px] bg-gold/10 dark:bg-gold/20 text-gold px-1.5 py-0.5 rounded font-bold uppercase">
+                              {b.packageType}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-neutral-500 dark:text-neutral-450 mt-0.5">
+                            Date: {b.eventDate} | {b.villageCity}
+                          </p>
+                          <div className="text-[9px] text-neutral-400 dark:text-neutral-500 mt-1 flex justify-between items-center">
+                            <span>ID: {b.id}</span>
+                            <span className="text-primary dark:text-gold hover:underline font-semibold">
+                              Manage Request →
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+
+                      {bookings.filter(b => b.status === "pending").length === 0 && (
+                        <div className="py-6 text-center text-neutral-405 dark:text-neutral-550">
+                          No pending booking requests.
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+
           <ThemeToggle />
           <button
             onClick={handleLogout}
@@ -280,8 +563,8 @@ export default function AdminDashboardPage() {
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar Navigation */}
-        <div className="lg:col-span-1 bg-white rounded-2xl border border-gold/15 p-5 shadow-sm space-y-4 h-fit">
-          <h2 className="font-serif text-sm font-bold text-neutral-500 uppercase tracking-widest mb-2 border-b pb-2">
+        <div className="lg:col-span-1 bg-white dark:bg-neutral-900 rounded-2xl border border-gold/15 dark:border-gold/30 p-5 shadow-sm space-y-4 h-fit">
+          <h2 className="font-serif text-sm font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest mb-2 border-b dark:border-neutral-800 pb-2">
             Navigation Menu
           </h2>
 
@@ -290,6 +573,8 @@ export default function AdminDashboardPage() {
               { id: "overview", label: "Dashboard Overview", icon: TrendingUp },
               { id: "bookings", label: "Bookings Manager", icon: FileSpreadsheet },
               { id: "calendar", label: "Availability Calendar", icon: Calendar },
+              { id: "muhurat", label: "Vivah Muhurats", icon: Heart },
+              { id: "gallery", label: "Gallery Moderator", icon: ImageIcon },
               { id: "packages", label: "Standard Packages", icon: Layers },
               { id: "items", label: "Rental Items & Price", icon: DollarSign },
               { id: "reviews", label: "Reviews Approvals", icon: Star },
@@ -302,8 +587,8 @@ export default function AdminDashboardPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all text-left cursor-pointer ${
                     activeTab === tab.id
-                      ? "bg-primary/10 text-primary border-l-4 border-gold"
-                      : "text-neutral-600 hover:bg-neutral-50 hover:text-primary"
+                      ? "bg-primary/10 dark:bg-gold/10 text-primary dark:text-gold border-l-4 border-gold"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary dark:hover:text-gold"
                   }`}
                 >
                   <Icon className="h-4.5 w-4.5" />
@@ -427,12 +712,12 @@ export default function AdminDashboardPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="space-y-6 bg-white rounded-2xl p-6 border border-gold/15 shadow-sm"
+                className="space-y-6 bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-gold/15 dark:border-gold/30 shadow-sm"
               >
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 border-gold/10 gap-3">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 border-gold/10 dark:border-neutral-850 gap-3">
                   <div>
-                    <h2 className="font-serif text-xl font-bold text-neutral-900">Bookings Database</h2>
-                    <p className="text-xs text-neutral-500">Approve, complete, or reject client reservation submissions.</p>
+                    <h2 className="font-serif text-xl font-bold text-neutral-900 dark:text-neutral-100">Bookings Database</h2>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-405">Approve, complete, or reject client reservation submissions.</p>
                   </div>
 
                   <button
@@ -455,14 +740,14 @@ export default function AdminDashboardPage() {
                       placeholder="Search by Name or Reference ID..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-gold"
+                      className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:border-gold bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
                     />
                   </div>
 
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-3 py-2 text-xs rounded-xl border border-neutral-200 bg-white"
+                    className="px-3 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none"
                   >
                     <option value="all">All Statuses</option>
                     <option value="pending">Pending</option>
@@ -650,6 +935,261 @@ export default function AdminDashboardPage() {
 
                     {availability.length === 0 && (
                       <p className="text-center py-10 text-neutral-400">No dates are currently blocked.</p>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* HINDU MARRIAGE MUHURATS TAB */}
+            {activeTab === "muhurat" && (
+              <motion.div
+                key="muhurat"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-6"
+              >
+                {/* Year and Month Filters */}
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-gold/15 dark:border-gold/30 shadow-sm space-y-4">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-3 border-gold/10 gap-3">
+                    <div>
+                      <h2 className="font-serif text-xl font-bold text-neutral-900 dark:text-neutral-100">
+                        Hindu Vivah Muhurat Calendar
+                      </h2>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-405">
+                        Auspicious marriage dates for 2026 & 2027. Instantly block dates on the Availability Calendar.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center space-x-2 text-xs">
+                      <select
+                        value={muhuratYearFilter}
+                        onChange={(e) => setMuhuratYearFilter(e.target.value)}
+                        className="px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none"
+                      >
+                        <option value="all">All Years</option>
+                        <option value="2026">2026 Only</option>
+                        <option value="2027">2027 Only</option>
+                      </select>
+
+                      <select
+                        value={muhuratMonthFilter}
+                        onChange={(e) => setMuhuratMonthFilter(e.target.value)}
+                        className="px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:outline-none"
+                      >
+                        <option value="all">All Months</option>
+                        <option value="01">January (जनवरी)</option>
+                        <option value="02">February (फरवरी)</option>
+                        <option value="03">March (मार्च)</option>
+                        <option value="04">April (अप्रैल)</option>
+                        <option value="05">May (मई)</option>
+                        <option value="06">June (जून)</option>
+                        <option value="07">July (जुलाई)</option>
+                        <option value="11">November (नवंबर)</option>
+                        <option value="12">December (दिसंबर)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Calendar Grid List */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                    {MUHURAT_DATES.filter((item) => {
+                      const year = item.date.split("-")[0];
+                      const month = item.date.split("-")[1];
+                      const matchesYear = muhuratYearFilter === "all" || year === muhuratYearFilter;
+                      const matchesMonth = muhuratMonthFilter === "all" || month === muhuratMonthFilter;
+                      return matchesYear && matchesMonth;
+                    }).map((item) => {
+                      const isBlocked = availability.find((a) => a.date === item.date);
+                      const booking = bookings.find((b) => b.eventDate === item.date && b.status !== "rejected");
+                      
+                      let statusText = "Available";
+                      let badgeColor = "bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-400";
+                      
+                      if (booking) {
+                        statusText = `Booked (${booking.customerName})`;
+                        badgeColor = "bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-455";
+                      } else if (isBlocked) {
+                        statusText = "Blocked (Manual)";
+                        badgeColor = "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400";
+                      }
+
+                      // Format date nicely
+                      const formattedDate = new Date(item.date).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric"
+                      });
+
+                      return (
+                        <div
+                          key={item.date}
+                          className={`p-4 rounded-2xl border transition-all duration-200 flex flex-col justify-between space-y-3 shadow-xs ${
+                            booking
+                              ? "border-rose-200 dark:border-rose-900/50 bg-rose-50/20 dark:bg-rose-950/5"
+                              : isBlocked
+                              ? "border-neutral-200 dark:border-neutral-800 bg-neutral-50/30 dark:bg-neutral-900/30"
+                              : "border-gold/10 hover:border-gold/30 bg-white dark:bg-neutral-900 hover:shadow-sm"
+                          }`}
+                        >
+                          <div>
+                            <div className="flex justify-between items-center">
+                              <strong className="text-neutral-800 dark:text-neutral-250 text-sm">
+                                {formattedDate}
+                              </strong>
+                              <span className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase ${badgeColor}`}>
+                                {statusText}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-1">
+                              {item.label}
+                            </p>
+                            {booking && (
+                              <div className="mt-2 p-1.5 rounded bg-neutral-50 dark:bg-neutral-800 text-[10px] space-y-0.5 border border-neutral-100 dark:border-neutral-700">
+                                <div className="font-semibold text-neutral-700 dark:text-neutral-350 truncate">
+                                  Client: {booking.customerName}
+                                </div>
+                                <div className="text-neutral-500">
+                                  Type: {booking.eventType} | Status: <span className="font-bold">{booking.status}</span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          <button
+                            disabled={!!booking}
+                            onClick={() => handleToggleMuhuratDate(item.date, item.label)}
+                            className={`w-full py-1.5 rounded-xl border text-[10px] font-bold uppercase tracking-wider transition-all flex items-center justify-center cursor-pointer ${
+                              booking
+                                ? "border-neutral-205 text-neutral-400 bg-neutral-50 dark:bg-neutral-850 dark:border-neutral-700 cursor-not-allowed"
+                                : isBlocked
+                                ? "border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-950/20"
+                                : "border-red-600 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+                            }`}
+                          >
+                            {isBlocked ? "Unblock Date" : "Block Date"}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* DECORATION GALLERY TAB */}
+            {activeTab === "gallery" && (
+              <motion.div
+                key="gallery"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-6"
+              >
+                {/* Add Gallery Item Form */}
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-gold/15 dark:border-gold/30 shadow-sm space-y-4">
+                  <h2 className="font-serif text-xl font-bold text-neutral-900 dark:text-neutral-100 border-b dark:border-neutral-800 pb-2">
+                    Add New Gallery Image
+                  </h2>
+
+                  <form onSubmit={handleAddGalleryItem} className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end text-xs sm:text-sm">
+                    <div className="space-y-1 sm:col-span-1">
+                      <label className="font-bold text-neutral-700 dark:text-neutral-300">Title / Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={newGalleryTitle}
+                        onChange={(e) => setNewGalleryTitle(e.target.value)}
+                        placeholder="e.g. Royal Red Wedding Tent"
+                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:border-gold bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+                      />
+                    </div>
+
+                    <div className="space-y-1 sm:col-span-2">
+                      <label className="font-bold text-neutral-700 dark:text-neutral-300">Image URL</label>
+                      <input
+                        type="url"
+                        required
+                        value={newGalleryUrl}
+                        onChange={(e) => setNewGalleryUrl(e.target.value)}
+                        placeholder="https://images.unsplash.com/..."
+                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:border-gold bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+                      />
+                    </div>
+
+                    <div className="space-y-1 sm:col-span-1">
+                      <label className="font-bold text-neutral-700 dark:text-neutral-300">Category</label>
+                      <select
+                        value={newGalleryCategory}
+                        onChange={(e) => setNewGalleryCategory(e.target.value as any)}
+                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none focus:border-gold bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+                      >
+                        <option value="wedding">Wedding (शादी)</option>
+                        <option value="mandap">Mandap (मंडप)</option>
+                        <option value="stage">Stage (मंच)</option>
+                        <option value="lighting">Lighting (लाइट्स)</option>
+                        <option value="decoration">Decoration (सजावट)</option>
+                        <option value="birthday">Birthday (जन्मदिन)</option>
+                      </select>
+                    </div>
+
+                    <div className="sm:col-span-4 flex justify-end">
+                      <button
+                        type="submit"
+                        className="px-6 py-2.5 rounded-xl royal-red-gradient text-white font-bold uppercase tracking-wider text-xs gold-border cursor-pointer hover:scale-[1.01] transition-transform"
+                      >
+                        Upload Image to Gallery
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                {/* Gallery Items Grid */}
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-gold/15 dark:border-gold/30 shadow-sm space-y-4">
+                  <h3 className="font-serif text-lg font-bold text-neutral-800 dark:text-neutral-200 border-b dark:border-neutral-800 pb-2">
+                    Current Decoration Gallery Catalog
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    {galleryItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="group relative bg-neutral-50 dark:bg-neutral-800 rounded-2xl overflow-hidden border border-neutral-100 dark:border-neutral-800 shadow-sm transition-all hover:shadow-md"
+                      >
+                        <div className="aspect-[4/3] w-full overflow-hidden relative bg-neutral-200 dark:bg-neutral-750">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <span className="absolute top-2 left-2 bg-neutral-950/75 text-gold text-[9px] font-bold uppercase px-2 py-0.5 rounded backdrop-blur-sm border border-gold/20">
+                            {item.category}
+                          </span>
+                        </div>
+                        <div className="p-4 flex justify-between items-center bg-white dark:bg-neutral-900">
+                          <div>
+                            <h4 className="font-bold text-neutral-800 dark:text-neutral-200 text-xs truncate max-w-[150px]">
+                              {item.title}
+                            </h4>
+                            <span className="text-[9px] text-neutral-400">ID: {item.id}</span>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteGalleryItem(item.id)}
+                            className="p-2 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
+                            title="Delete gallery image"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {galleryItems.length === 0 && (
+                      <div className="col-span-full py-16 text-center text-neutral-400 dark:text-neutral-550">
+                        No gallery images found. Add some images using the form above.
+                      </div>
                     )}
                   </div>
                 </div>
@@ -996,68 +1536,68 @@ export default function AdminDashboardPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="bg-white rounded-2xl p-6 border border-gold/15 shadow-sm space-y-6"
+                className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-gold/15 dark:border-gold/30 shadow-sm space-y-6"
               >
-                <div className="border-b pb-4 border-gold/10">
-                  <h2 className="font-serif text-xl font-bold text-neutral-900">Console Settings</h2>
-                  <p className="text-xs text-neutral-500">Edit business contacts, tax parameters, and metadata configurations.</p>
+                <div className="border-b pb-4 border-gold/10 dark:border-neutral-800">
+                  <h2 className="font-serif text-xl font-bold text-neutral-900 dark:text-neutral-100">Console Settings</h2>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Edit business contacts, tax parameters, and metadata configurations.</p>
                 </div>
 
                 <form onSubmit={handleSaveSettings} className="space-y-4 text-xs sm:text-sm">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="font-bold text-neutral-700">Business Name</label>
+                      <label className="font-bold text-neutral-700 dark:text-neutral-300">Business Name</label>
                       <input
                         type="text"
                         required
                         value={settings.businessName}
                         onChange={(e) => setSettings({ ...settings, businessName: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 focus:outline-none"
+                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-bold text-neutral-700">GST Percentage (%)</label>
+                      <label className="font-bold text-neutral-700 dark:text-neutral-300">GST Percentage (%)</label>
                       <input
                         type="number"
                         required
                         value={settings.gstRate}
                         onChange={(e) => setSettings({ ...settings, gstRate: Number(e.target.value) })}
-                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 focus:outline-none"
+                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="font-bold text-neutral-700">Tagline (Hindi / English)</label>
+                    <label className="font-bold text-neutral-700 dark:text-neutral-300">Tagline (Hindi / English)</label>
                     <input
                       type="text"
                       required
                       value={settings.tagline}
                       onChange={(e) => setSettings({ ...settings, tagline: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-neutral-200 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="font-bold text-neutral-700">Business Location Address</label>
+                    <label className="font-bold text-neutral-700 dark:text-neutral-300">Business Location Address</label>
                     <textarea
                       rows={2}
                       required
                       value={settings.location}
                       onChange={(e) => setSettings({ ...settings, location: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl border border-neutral-200 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="font-bold text-neutral-700">Contact Phone Numbers (Comma separated)</label>
+                    <label className="font-bold text-neutral-700 dark:text-neutral-300">Contact Phone Numbers (Comma separated)</label>
                     <input
                       type="text"
                       required
                       value={settings.contactNumbers.join(", ")}
                       onChange={(e) => setSettings({ ...settings, contactNumbers: e.target.value.split(",").map(c => c.trim()) })}
-                      className="w-full px-3 py-2 rounded-xl border border-neutral-200 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 focus:outline-none bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
                     />
                   </div>
 

@@ -77,7 +77,7 @@ export default function ReviewsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Submit Review Card (Right/Left Column) */}
-          <div className="lg:col-span-1 bg-white rounded-2xl p-6 sm:p-8 border border-gold/15 shadow-sm space-y-5 h-fit sticky top-24">
+          <div className="lg:col-span-1 bg-white rounded-2xl p-6 sm:p-8 border border-gold/15 shadow-sm space-y-5 h-fit lg:sticky lg:top-24">
             <h2 className="font-serif text-lg font-bold text-neutral-900 border-b pb-3 border-gold/10">
               Submit Your Review
             </h2>

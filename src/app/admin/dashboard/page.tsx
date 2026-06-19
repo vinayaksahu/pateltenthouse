@@ -46,6 +46,7 @@ import {
   Lock
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -265,13 +266,16 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-white/20 text-neutral-400 hover:text-white hover:bg-white/5 text-xs transition-colors"
-        >
-          <LogOut className="h-3.5 w-3.5" />
-          <span>Logout</span>
-        </button>
+        <div className="flex items-center space-x-3">
+          <ThemeToggle />
+          <button
+            onClick={handleLogout}
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-white/20 text-neutral-400 hover:text-white hover:bg-white/5 text-xs transition-colors cursor-pointer"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+            <span>Logout</span>
+          </button>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">

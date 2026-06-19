@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone, MessageSquare, Tent, Sun, Moon, Globe } from "lucide-react";
+import { Menu, X, Phone, MessageSquare, Tent, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "next-themes";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -109,25 +110,7 @@ export default function Header() {
 
             {/* Right Action Buttons */}
             <div className="hidden sm:flex items-center space-x-3">
-              {mounted && (
-                <>
-                  <button
-                    onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                    className="flex items-center space-x-1 px-2.5 py-1.5 rounded-full border border-primary/20 dark:border-gold/30 text-primary dark:text-gold text-xs font-semibold hover:bg-primary/5 dark:hover:bg-gold/10 transition-all"
-                    title="Toggle Language"
-                  >
-                    <Globe className="h-3.5 w-3.5" />
-                    <span>{language === "en" ? "HI" : "EN"}</span>
-                  </button>
-                  <button
-                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                    className="p-1.5 rounded-full border border-primary/20 dark:border-gold/30 text-primary dark:text-gold hover:bg-primary/5 dark:hover:bg-gold/10 transition-all"
-                    title="Toggle Theme"
-                  >
-                    {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                  </button>
-                </>
-              )}
+              <ThemeToggle />
               <a
                 href="tel:9713661625"
                 className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full border border-primary/20 dark:border-gold/30 text-primary dark:text-gold text-xs font-semibold hover:bg-primary/5 dark:hover:bg-gold/10 transition-all"
@@ -144,15 +127,8 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Toggle */}
-            <div className="lg:hidden flex items-center space-x-3">
-              {mounted && (
-                <button
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="p-1.5 rounded-full text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-                >
-                  {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                </button>
-              )}
+            <div className="flex items-center space-x-2 lg:hidden">
+              <ThemeToggle />
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-1.5 rounded-md text-neutral-700 dark:text-neutral-300 hover:text-primary dark:hover:text-gold hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"

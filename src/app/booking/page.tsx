@@ -429,11 +429,17 @@ function BookingFormContent() {
                       const dayStr = String(day).padStart(2, "0");
                       const formattedDate = `${year}-${month}-${dayStr}`;
 
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      const isPast = dateObj < today;
+
                       const status = getDateStatus(formattedDate);
                       const isSelected = form.eventDate === formattedDate;
 
                       let bgClass = "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 border border-green-200/50 dark:border-green-800/50";
-                      if (status === "booked") {
+                      if (isPast) {
+                        bgClass = "bg-neutral-100 dark:bg-neutral-800/40 text-neutral-300 dark:text-neutral-600 border border-neutral-200/30 dark:border-neutral-700/30 cursor-not-allowed opacity-45";
+                      } else if (status === "booked") {
                         bgClass = "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200/50 dark:border-rose-800/50";
                       } else if (status === "blocked") {
                         bgClass = "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 border border-neutral-200/50 dark:border-neutral-700/50 cursor-not-allowed";
@@ -450,7 +456,7 @@ function BookingFormContent() {
                           key={day}
                           type="button"
                           onClick={() => handleDateSelect(formattedDate, status)}
-                          disabled={status === "blocked"}
+                          disabled={status === "blocked" || isPast}
                           className={`h-9 rounded-lg flex flex-col items-center justify-center font-bold transition-all relative ${bgClass}`}
                         >
                           <span>{day}</span>

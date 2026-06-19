@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getSettings } from "@/lib/db";
+import { getSettings, createBooking } from "@/lib/db";
 import { RentalItem, BusinessSettings } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
 import {
@@ -14,11 +14,16 @@ import {
   Download,
   ShoppingBag,
   HelpCircle,
-  Undo
+  Undo,
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+  CheckCircle2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 export default function CustomPackageBuilder() {
   const { language } = useLanguage();
@@ -41,6 +46,81 @@ export default function CustomPackageBuilder() {
     items: { item: RentalItem; qty: number }[];
     total: number;
   } | null>(null);
+
+  // Custom Inquiry Booking Form State
+  const [eventDate, setEventDate] = useState("");
+  const [eventType, setEventType] = useState("Wedding");
+  const [eventAddress, setEventAddress] = useState("");
+  const [eventTime, setEventTime] = useState("18:00");
+  const [expectedGuests, setExpectedGuests] = useState(100);
+  const [submittingBooking, setSubmittingBooking] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingId, setBookingId] = useState("");
+
+  const submitInquiryToDatabase = async () => {
+    if (!clientName) {
+      alert("Please enter your name to submit a booking inquiry.");
+      return;
+    }
+    if (!clientPhone) {
+      alert("Please enter your phone number to submit a booking inquiry.");
+      return;
+    }
+    if (!eventDate) {
+      alert("Please select an Event Date.");
+      return;
+    }
+    if (selectedItemsList.length === 0) {
+      alert("Please select at least one item before submitting.");
+      return;
+    }
+
+    setSubmittingBooking(true);
+    try {
+      const res = await createBooking({
+        customerName: clientName,
+        mobileNumber: clientPhone,
+        whatsappNumber: clientPhone,
+        villageCity: eventAddress.split(",")[0] || "Unknown",
+        eventAddress: eventAddress,
+        eventDate: eventDate,
+        eventTime: eventTime,
+        eventType: eventType,
+        expectedGuests: Number(expectedGuests),
+        packageType: "custom",
+        selectedItems: selectedItemsList.map((si) => ({
+          itemId: si.item.id,
+          name: si.item.name,
+          quantity: si.quantity,
+          pricePerUnit: si.item.pricePerUnit,
+          total: si.total,
+        })),
+        subtotal,
+        gst,
+        grandTotal,
+        status: "pending"
+      });
+
+      setBookingId(res.id);
+      setBookingSuccess(true);
+
+      const confettiModule = await import("canvas-confetti");
+      confettiModule.default({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        setBookingSuccess(false);
+      }, 5000);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to submit inquiry booking. Please try again.");
+    } finally {
+      setSubmittingBooking(false);
+    }
+  };
 
   useEffect(() => {
     async function load() {
@@ -253,7 +333,7 @@ export default function CustomPackageBuilder() {
       `Rs. ${si.total}`
     ]);
 
-    doc.autoTable({
+    autoTable(doc, {
       startY: 78,
       head: [["S.No", "Rental Item", "Quantity", "Rate / Unit", "Total Price"]],
       body: tableBody,
@@ -307,7 +387,7 @@ export default function CustomPackageBuilder() {
             {/* AI Budget Planner */}
             <div className="bg-neutral-950 text-white rounded-2xl p-6 border border-gold/30 shadow-md space-y-4">
               <h2 className="font-serif text-lg font-bold text-gold flex items-center">
-                <Sparkles className="h-5 w-5 mr-2" /> AI Budget Package Recommender
+                <Sparkles className="h-5 w-5 mr-2" /> Budget Package Recommender
               </h2>
               <p className="text-xs text-neutral-300">
                 Enter your total decoration budget (in Rupees) and we will automatically select the best items configuration for you.
@@ -511,31 +591,100 @@ export default function CustomPackageBuilder() {
               </div>
 
               {/* Form client info */}
-              <div className="space-y-3 border-t border-neutral-100 dark:border-neutral-800 pt-4">
-                <input
-                  type="text"
-                  placeholder="Your Name (Required)"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold"
-                  required
-                />
+              <div className="space-y-3 border-t border-neutral-100 dark:border-neutral-800 pt-4 text-neutral-800 dark:text-neutral-200">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Contact Details</label>
+                  <input
+                    type="text"
+                    placeholder="Your Name (Required)"
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white focus:outline-none focus:border-gold"
+                    required
+                  />
+                </div>
                 <input
                   type="tel"
-                  placeholder="Your Phone Number"
+                  placeholder="Your Phone Number (Required)"
                   value={clientPhone}
                   onChange={(e) => setClientPhone(e.target.value)}
-                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-950 dark:text-white focus:outline-none focus:border-gold"
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white focus:outline-none focus:border-gold"
+                  required
                 />
+
+                {/* Event Fields for Direct Submission */}
+                <div className="space-y-3 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 block">Event Setup Info</label>
+                  
+                  <div className="space-y-1">
+                    <input
+                      type="date"
+                      value={eventDate}
+                      onChange={(e) => setEventDate(e.target.value)}
+                      className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white focus:outline-none focus:border-gold"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <select
+                      value={eventType}
+                      onChange={(e) => setEventType(e.target.value)}
+                      className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white focus:outline-none focus:border-gold"
+                    >
+                      <option>Wedding</option>
+                      <option>Reception</option>
+                      <option>Engagement</option>
+                      <option>Birthday</option>
+                      <option>Religious Event</option>
+                      <option>Anniversary</option>
+                      <option>Other</option>
+                    </select>
+
+                    <input
+                      type="number"
+                      placeholder="Expected Guests"
+                      value={expectedGuests}
+                      onChange={(e) => setExpectedGuests(Number(e.target.value))}
+                      className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white focus:outline-none focus:border-gold"
+                    />
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="Event Location / Village"
+                    value={eventAddress}
+                    onChange={(e) => setEventAddress(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white focus:outline-none focus:border-gold"
+                  />
+                </div>
               </div>
+
+              {bookingSuccess && (
+                <div className="bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 p-3 rounded-xl text-center text-xs font-semibold border border-green-200 dark:border-green-900/50 flex items-center justify-center space-x-1">
+                  <CheckCircle2 className="h-4 w-4" />
+                  <span>Submitted! ID: {bookingId}</span>
+                </div>
+              )}
 
               <div className="space-y-2.5 pt-2">
                 <button
+                  onClick={submitInquiryToDatabase}
+                  disabled={selectedItemsList.length === 0 || submittingBooking}
+                  className={`w-full py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                    selectedItemsList.length === 0
+                      ? "bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed border-0"
+                      : "royal-red-gradient text-white hover:scale-105 shadow-md gold-border"
+                  }`}
+                >
+                  <span>{submittingBooking ? "Submitting Inquiry..." : "Submit Inquiry to Admin"}</span>
+                </button>
+
+                <button
                   onClick={sendWhatsAppQuote}
                   disabled={selectedItemsList.length === 0}
-                  className={`w-full py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all ${
+                  className={`w-full py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all cursor-pointer ${
                     selectedItemsList.length === 0
-                      ? "bg-neutral-200 text-neutral-400 cursor-not-allowed border-0"
+                      ? "bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed border-0"
                       : "bg-[#25D366] hover:bg-[#20ba59] text-white hover:scale-105 shadow-md"
                   }`}
                 >
@@ -546,7 +695,7 @@ export default function CustomPackageBuilder() {
                 <button
                   onClick={downloadPDFQuote}
                   disabled={selectedItemsList.length === 0}
-                  className={`w-full py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 border transition-all ${
+                  className={`w-full py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 border transition-all cursor-pointer ${
                     selectedItemsList.length === 0
                       ? "bg-white dark:bg-neutral-900 text-neutral-300 dark:text-neutral-600 border-neutral-200 dark:border-neutral-800 cursor-not-allowed"
                       : "bg-white dark:bg-neutral-900 text-primary dark:text-gold border-primary dark:border-gold hover:bg-primary/5 dark:hover:bg-gold/10 hover:scale-105"
